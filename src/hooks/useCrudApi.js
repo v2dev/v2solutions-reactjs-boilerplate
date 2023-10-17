@@ -3,7 +3,7 @@ import axios from 'axios';
 import API_BASE_URL from '../configs/apiBaseUrl'; // Import the base URL
 
 const useCrudApi = (apiEndpoint) => {
-  const [data, setData] = useState([]);
+  const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -13,7 +13,7 @@ const useCrudApi = (apiEndpoint) => {
 
     try {
       const response = await axios.get(API_BASE_URL+apiEndpoint);
-      setData(response.data);
+      setTodos(response.data);
     } catch (error) {
       setError(error);
     }
@@ -52,7 +52,7 @@ const useCrudApi = (apiEndpoint) => {
     fetchData();
   }, []); // Fetch data when the component mounts
 
-  return { data, isLoading, error, fetchData, postData, updateData, deleteData };
+  return { todos, isLoading, error, fetchData, postData, updateData, deleteData };
 };
 
 export default useCrudApi;

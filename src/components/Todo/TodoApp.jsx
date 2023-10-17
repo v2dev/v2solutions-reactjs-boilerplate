@@ -1,41 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import useCrudApi from '../../hooks/useCrudApi'; // Import the new CRUD hook
+import useCrudApi from '../../hooks/useCrudApi';
 import API_ENDPOINTS from '../../configs/apiConfig';
+import { connect } from 'react-redux';
+import { setTodos, addTodo, updateTodo, deleteTodo } from '../../redux/todos';
 
-function TodoApp() {
-  const apiEndpoint = API_ENDPOINTS.TODOS; 
-
-  const {
-    data: todos,
-    isLoading,
-    error,
-    fetchData,
-    postData,
-    updateData,
-    deleteData,
-  } = useCrudApi(apiEndpoint);
+function TodoApp(props) {
+  const apiEndpoint = API_ENDPOINTS.TODOS;
+  const { addTodo, updateTodo, deleteTodo } = props;
+  const { todos,fetchData,postData, updateData, deleteData, isLoading, error } = useCrudApi(apiEndpoint);
 
   const [newTodo, setNewTodo] = useState({ title: '', description: '', completed: false });
   const [editingTask, setEditingTask] = useState(null);
 
   useEffect(() => {
     fetchData();
-  }, []); // Fetch data when the component mounts
-  useEffect(() => {
-    // If editingTask is set, populate the form with the task data
-    if (editingTask !== null) {
-      const taskToEdit = todos.find((task) => task._id === editingTask);
-      if (taskToEdit) {
-        setNewTodo({ ...taskToEdit });
-      }
-    }
-  }, [editingTask, todos]);
+  }, []); 
+  
 
   const handleAddTodo = async () => {
     try {
       const response = await postData(newTodo);
-      setNewTodo({ title: '', description: '', completed: false });
-      fetchData(); // Refresh the data after adding
+      if (!response.error) {
+        addTodo(response.todo);
+        setNewTodo({ title: '', description: '', completed: false });
+        fetchData();
+      } else {
+        console.error('API Error:', response.error);
+      }
     } catch (error) {
       console.error('Error adding task:', error);
     }
@@ -44,13 +35,15 @@ function TodoApp() {
   const handleEditTodo = async () => {
     if (editingTask !== null) {
       try {
-        await updateData(editingTask, newTodo);
-        setNewTodo({ title: '', description: '', completed: false });
-        setEditingTask(null);
-        fetchData(); // Refresh the data after updating
-
-
-        
+        const response = await updateData(editingTask, newTodo);
+        if (!response.error) {
+          updateTodo(newTodo);
+          setNewTodo({ title: '', description: '', completed: false });
+          setEditingTask(null);
+          fetchData(); // Refresh the data after updating
+        } else {
+          console.error('API Error:', response.error);
+        }
       } catch (error) {
         console.error('Error updating task:', error);
       }
@@ -59,8 +52,12 @@ function TodoApp() {
 
   const handleDeleteTodo = async (taskId) => {
     try {
-      await deleteData(taskId);
-      fetchData(); // Refresh the data after deleting
+      const response = await deleteData(taskId);
+      if (!response.error) {
+        deleteTodo(taskId);
+      } else {
+        console.error('API Error:', response.error);
+      }
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -104,26 +101,28 @@ function TodoApp() {
       </div>
       <div>
         <h2>Todo List</h2>
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : error ? (
-          <div>Error: {error.message}</div>
-        ) : (
-          <ul>
-            {todos.map((todo) => (
-              <li key={todo._id}>
-                <strong>{todo.title}</strong>
-                <p>{todo.description}</p>
-                <p>Completed: {todo.completed ? 'Yes' : 'No'}</p>
-                <button className="edit-button" onClick={() => setEditingTask(todo._id)}>Edit</button>
-                <button className="delete-button" onClick={() => handleDeleteTodo(todo._id)}>Delete</button>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul>
+          {todos.map((todo) => (
+            <li key={todo._id}>
+              <strong>{todo.title}</strong>
+              <p>{todo.description}</p>
+              <p>Completed: {todo.completed ? 'Yes' : 'No'}</p>
+              <button className="edit-button" onClick={() => setEditingTask(todo._id)}>
+                Edit
+              </button>
+              <button className="delete-button" onClick={() => handleDeleteTodo(todo._id)}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
 
-export default TodoApp;
+const mapStateToProps = (state) => ({
+  todos: state.todos.todos,
+});
+
+export default connect(mapStateToProps, { setTodos, addTodo, updateTodo, deleteTodo })(TodoApp);
