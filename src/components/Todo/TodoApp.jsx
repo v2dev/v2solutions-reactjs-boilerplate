@@ -55,12 +55,21 @@ function TodoApp(props) {
       const response = await deleteData(taskId);
       if (!response.error) {
         deleteTodo(taskId);
+        fetchData(); 
       } else {
         console.error('API Error:', response.error);
       }
     } catch (error) {
       console.error('Error deleting task:', error);
     }
+  };
+  const onClickEditTodo = (todo) => {
+    setNewTodo({
+      title: todo.title,
+      description: todo.description,
+      completed: todo.completed,
+    });
+    setEditingTask(todo._id);
   };
 
   return (
@@ -107,7 +116,7 @@ function TodoApp(props) {
               <strong>{todo.title}</strong>
               <p>{todo.description}</p>
               <p>Completed: {todo.completed ? 'Yes' : 'No'}</p>
-              <button className="edit-button" onClick={() => setEditingTask(todo._id)}>
+              <button className="edit-button" onClick={() => onClickEditTodo(todo)}>
                 Edit
               </button>
               <button className="delete-button" onClick={() => handleDeleteTodo(todo._id)}>
