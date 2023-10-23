@@ -20,15 +20,18 @@ function TodoApp(props) {
   const handleAddTodo = async () => {
     try {
       const response = await postData(newTodo);
-      if (!response.error) {
+      if ( response && !response.error) {
         addTodo(response.todo);
         setNewTodo({ title: '', description: '', completed: false });
         fetchData();
-      } else {
-        console.error('API Error:', response.error);
+      } else if (response && response.error) { // Handle errors if response is defined
+        console.log('API Error:', response.error);
+      }else {
+        console.log('Unexpected response:', response);
       }
+  
     } catch (error) {
-      console.error('Error adding task:', error);
+      console.log('Error adding task:', error);
     }
   };
 
@@ -42,10 +45,10 @@ function TodoApp(props) {
           setEditingTask(null);
           fetchData(); // Refresh the data after updating
         } else {
-          console.error('API Error:', response.error);
+          console.log('API Error:', response.error);
         }
       } catch (error) {
-        console.error('Error updating task:', error);
+        console.log('Error updating task:', error);
       }
     }
   };
@@ -57,10 +60,10 @@ function TodoApp(props) {
         deleteTodo(taskId);
         fetchData(); 
       } else {
-        console.error('API Error:', response.error);
+        console.log('API Error:', response.error);
       }
     } catch (error) {
-      console.error('Error deleting task:', error);
+      console.log('Error deleting task:', error);
     }
   };
   const onClickEditTodo = (todo) => {
@@ -74,7 +77,7 @@ function TodoApp(props) {
 
   return (
     <div className="container">
-      <h1>Todo List</h1>
+      <h1>Todo Application</h1>
       <div>
         <h2>{editingTask !== null ? 'Edit Task' : 'Add New Task'}</h2>
         <input
@@ -110,7 +113,7 @@ function TodoApp(props) {
       </div>
       <div>
         <h2>Todo List</h2>
-        <ul>
+        <ul role="todo">
           {todos.map((todo) => (
             <li key={todo._id}>
               <strong>{todo.title}</strong>
@@ -119,7 +122,7 @@ function TodoApp(props) {
               <button className="edit-button" onClick={() => onClickEditTodo(todo)}>
                 Edit
               </button>
-              <button className="delete-button" onClick={() => handleDeleteTodo(todo._id)}>
+              <button  data-task-id={todo._id} className="delete-button" onClick={() => handleDeleteTodo(todo._id)}>
                 Delete
               </button>
             </li>
