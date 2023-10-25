@@ -1,5 +1,5 @@
 const API_ENDPOINTS = {
-  TODOS: '/todos', 
-};
+  TODOS: "/todos",
+}
 
-export default API_ENDPOINTS;
+export default API_ENDPOINTS

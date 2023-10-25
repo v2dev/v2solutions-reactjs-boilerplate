@@ -1,15 +1,14 @@
-const {defaults} = require('jest-config');
+const { defaults } = require("jest-config")
 
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.{js,jsx}'],
-  coverageDirectory: 'coverage',
-  testEnvironment: 'jsdom',
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-};
+  collectCoverageFrom: ["src/**/*.{js,jsx}"],
+  coverageDirectory: "coverage",
+  testEnvironment: "jsdom",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+}
 const config = {
-  moduleFileExtensions: [...defaults.moduleFileExtensions, 'mts', 'cts'],
-};
-  
-module.exports = config;
+  moduleFileExtensions: [...defaults.moduleFileExtensions, "mts", "cts"],
+}
 
+module.exports = config

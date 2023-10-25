@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react"
 
 function Header() {
   return (
-      <header className="header">
+    <header className="header">
       <div className="logo">
-        <span className="logo-name">My Todo list</span> 
+        <span className="logo-name">My Todo list</span>
       </div>
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header
