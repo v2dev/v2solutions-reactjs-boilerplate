@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --env=jsdom",
-    "start": "npx webpack-dev-server --mode development --open --hot",
+    "start": "npx webpack-dev-server --mode development --open --hot --history-api-fallback",
     "build": "npx webpack --mode production",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -49,9 +49,11 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
+    "bootstrap": "^5.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.1.3",
+    "react-router-dom": "^6.17.0",
     "redux": "^4.2.1",
     "redux-thunk": "^2.4.2"
   }

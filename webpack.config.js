@@ -31,12 +31,13 @@ module.exports = {
 
   // Options for resolving module requests
   // extensions that are used
-  resolve: { extensions: ["*", ".js", ".jsx"] },
+  resolve: { extensions: [".js", ".jsx"] },
   // Output point is where webpack should
   // output the bundles and assets
   output: {
     path: path.resolve(__dirname, "dist/"),
-    publicPath: "/dist/",
+    publicPath: "/",
     filename: "bundle.js",
-  },
+
+  }
 }
