@@ -50,14 +50,14 @@ body {
   background-color: #f0f0f0;
 }
 
-.container {
+/* .container {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-}
+} */
 
 h1 {
   font-size: 24px;

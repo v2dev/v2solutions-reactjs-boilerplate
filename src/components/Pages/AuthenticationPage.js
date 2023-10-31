@@ -1,111 +1,78 @@
-import React from "react"
-import { json, redirect } from "react-router-dom";
-import {
-    Form,
-    Link,
-    useActionData,
-    useNavigation,
-    useSearchParams,
-  } from "react-router-dom";
-import API_BASE_URL from "../../configs/apiBaseUrl" // Import the base URL
+/* eslint-disable no-unused-vars */
+import React ,{ useState } from "react"
+
+import { useDispatch, useSelector } from 'react-redux';
+import { login, register } from '../../redux/auth';
 
 function AuthenticationPage() {
-    const data = useActionData();
-    const navigation = useNavigation();
-    const [searchParam] = useSearchParams();
-    const isLogin = searchParam.get("mode") === "login";
-    const isSubmitting = navigation.state === "submitting";
-  
-    return (
-      <>
-      <div className="hero-body">
-        <div className="container">
-          <div className="columns is-centered">
-              <div className="column is-4-desktop">
-                <Form method="post" className="box">
-                  <h1 className="text-center">{isLogin ? "Log in" : "Create a new user"}</h1>
-                  {data && data.errors && (
-                    <ul>
-                      {Object.values(data.errors).map((err) => (
-                        <li key={err}>{err}</li>
-                      ))}
-                    </ul>
-                  )}
-                 
-                  <div className="field " style={{display: isLogin ? 'none' : 'block'}}>
-                      <label className="label">Name</label>
-                      <div className="controls">
-                          <input name="name" type="text" className="input form-control" placeholder="Name"  />
-                      </div>
-                  </div>
-                  
+  const dispatch = useDispatch();
+  const { loggedIn, error } = useSelector(state => state.auth) || {};
+  const [loginMode, setLoginMode] = useState(true); 
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
 
-                  <div className="field ">
-                      <label className="label">Email</label>
-                      <div className="controls">
-                          <input name="email" type="email" className="input form-control" placeholder="Email"  required/>
-                      </div>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (loginMode) {
+      const { email, password } = formData;
+      dispatch(login(email, password));
+    } else {
+      const { name, email, password } = formData;
+      dispatch(register(email, password, name));
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  return (
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h2 className="text-center mb-4">{loginMode ? 'Login' : 'Sign Up'}</h2>
+              {error && <p className="text-danger">{error}</p>}
+
+              <form onSubmit={handleSubmit}>
+                {!loginMode && (
+                  <div className="mb-3">
+                    <label htmlFor="name" className="form-label">Name</label>
+                    <input type="text" className="form-control" id="name" name="name" value={formData.name} onChange={handleInputChange} />
                   </div>
-                  <div className="field ">
-                      <label className="label">Password</label>
-                      <div className="controls">
-                          <input name="password" type="password" className="input form-control" placeholder="******"  required/>
-                      </div>
-                  </div>
-                  <div className="field mt-3">
-                        
-                        <button disabled={isSubmitting}>
-                          {isSubmitting ? "Submitting..." : "Submit"}
-                        </button>
-                        <Link  className="ms-3"  to={`?mode=${isLogin ? "register" : "login"}`}>
-                          {isLogin ? "Create new user" : "Go to Login"}
-                        </Link>
-                  </div>
-                </Form>
-              </div>
+                )}
+
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Email</label>
+                  <input type="email" className="form-control" id="email" name="email" value={formData.email} onChange={handleInputChange} />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Password</label>
+                  <input type="password" className="form-control" id="password" name="password" value={formData.password} onChange={handleInputChange} />
+                </div>
+
+                <button type="submit" className="btn btn-primary">{loginMode ? 'Login' : 'Sign Up'}</button>
+              </form>
+
+              <p className="mt-3">
+                {loginMode
+                  ? "Don't have an account? "
+                  : 'Already have an account? '}
+                 <span className="text-primary" onClick={() => setLoginMode(!loginMode)}>
+                  {loginMode ? 'Sign Up' : 'Login'}
+                </span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      </>
-    );
+    </div>
+  );
 }
 
 export default AuthenticationPage;
 
-export async function action({ request }) {
-  const searchParam = new URL(request.url).searchParams;
-  const mode = searchParam.get("mode") || "register";
-  const data = await request.formData();
-  
-  if (mode !== "login" && mode !== "register") {
-    throw json({ message: "Unsupported mode" }, { status: 422 });
-  }
-  // let authData = {
-  //   email: data.get("email"),
-  //   password: data.get("password"),
-  //   name: data.get("name"),
-  // };
-  // if(mode=="login"){
-    const authData = {
-      email: data.get("email"),
-      password: data.get("password"),
-    };
-  // }
-  const response = await fetch(API_BASE_URL+"/"+ mode, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(authData),
-  });
-  if (response.status === 422 || response.status === 402 || response.status === 500) {
-    return response;
-  }
-  // if (!response.ok) {
-  //   throw json({ message: "Could not authenticate user." }, { status: 500 });
-  // }
-  if (response.status === 200) {
-    return response;
-  }
-  
-}
+

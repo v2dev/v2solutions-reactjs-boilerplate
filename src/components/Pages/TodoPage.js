@@ -3,6 +3,7 @@ import Header from "../UI/Header/Header"
 import Footer from "../UI/Footer/Footer"
 import TodoApp from "../Todo/TodoApp"
 function TodoPage() {
+  console.log('jhi');
   return (
         <>
         <div>

@@ -83,7 +83,6 @@ function TodoApp(props) {
   return (
     <div className="container">
       <h1>Todo Application</h1>
-      <a href="/login">Login</a>
       <div>
         <h2>{editingTask !== null ? "Edit Task" : "Add New Task"}</h2>
         <input

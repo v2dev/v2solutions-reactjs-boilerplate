@@ -1,42 +1,46 @@
-import React from "react"
+import React ,{useEffect,useState} from "react"
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import RootLayout from "./components/pages/RootLayout";
-import ErrorPage from "./components/pages/ErrorPage";
-import TodoPage from "./components/pages/TodoPage";
-
-import { checkAuthLoader, tokenLoader } from "./util/auth";
-import AuthenticationPage, {
-  action as authAction,
-} from "./components/pages/AuthenticationPage";
+import RootLayout from "./components/Pages/RootLayout";
+import ErrorPage from "./components/Pages/ErrorPage";
+import TodoPage from "./components/Pages/TodoPage";
+import AuthenticationPage from "./components/Pages/AuthenticationPage";
+import {checkAuthLoader} from './util/auth'
 // import { action as logoutAction } from "./pages/Logout";
-
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    loader: tokenLoader,
-    children: [
-      {
-        index: true, 
-        element: <TodoPage />,
-        loader: checkAuthLoader,
-      },
-      {
-        path: "auth",
-        element: <AuthenticationPage />,
-        action: authAction,
-      },
-      // {
-      //   path: "/logout",
-      //   action: logoutAction,
-      // },
-    ],
-  },
-]);
+import axios from 'axios';
 
 function App() {
+  axios.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+  
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RootLayout />,
+      // errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,  // Define your protected route
+          element: <TodoPage />,
+          loader:checkAuthLoader
+        },
+        {
+          path: "auth",
+          element: <AuthenticationPage />,
+        },
+      ],
+    },
+  ]);
+
   return <RouterProvider router={router} />;
 }
 
