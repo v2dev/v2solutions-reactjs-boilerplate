@@ -1,14 +1,16 @@
-import React ,{useEffect,useState} from "react"
+import React  from "react"
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./components/Pages/RootLayout";
-import ErrorPage from "./components/Pages/ErrorPage";
+// import ErrorPage from "./components/Pages/ErrorPage";
 import TodoPage from "./components/Pages/TodoPage";
 import AuthenticationPage from "./components/Pages/AuthenticationPage";
-import {checkAuthLoader} from './util/auth'
-// import { action as logoutAction } from "./pages/Logout";
+import {checkAuthLoader} from './redux/auth'
+import { useDispatch } from 'react-redux';
+
 import axios from 'axios';
 
 function App() {
+
   axios.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem('token');
@@ -21,7 +23,8 @@ function App() {
       return Promise.reject(error);
     }
   );
-  
+  const dispatch = useDispatch();
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -31,7 +34,8 @@ function App() {
         {
           index: true,  // Define your protected route
           element: <TodoPage />,
-          loader:checkAuthLoader
+          loader:checkAuthLoader(dispatch)
+          
         },
         {
           path: "auth",

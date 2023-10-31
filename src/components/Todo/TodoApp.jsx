@@ -81,62 +81,104 @@ function TodoApp(props) {
   }
 
   return (
-    <div className="container">
-      <h1>Todo Application</h1>
-      <div>
-        <h2>{editingTask !== null ? "Edit Task" : "Add New Task"}</h2>
-        <input
-          type="text"
-          placeholder="Title"
-          value={newTodo.title}
-          onChange={(e) => setNewTodo({ ...newTodo, title: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={newTodo.description}
-          onChange={(e) => setNewTodo({ ...newTodo, description: e.target.value })}
-        />
-        <label>
-          Completed:
-          <input
-            type="checkbox"
-            checked={newTodo.completed}
-            onChange={(e) => setNewTodo({ ...newTodo, completed: e.target.checked })}
-          />
-        </label>
-        {editingTask !== null ? (
-          <button onClick={handleEditTodo} disabled={isLoading}>
-            {isLoading ? "Updating..." : "Update Task"}
-          </button>
-        ) : (
-          <button onClick={handleAddTodo} disabled={isLoading}>
-            {isLoading ? "Adding..." : "Add Task"}
-          </button>
-        )}
-        {error && <div>Error: {error.message}</div>}
-      </div>
-      <div>
-        <h2>Todo List</h2>
-        <ul role="todo">
-          {todos.map((todo) => (
-            <li key={todo._id}>
-              <strong>{todo.title}</strong>
-              <p>{todo.description}</p>
-              <p>Completed: {todo.completed ? "Yes" : "No"}</p>
-              <button className="edit-button" onClick={() => onClickEditTodo(todo)}>
-                Edit
-              </button>
+    <div className="container mt-5">
+      <div className="row mb-4">
+        <div className="col-md-6 ">
+          <form>
+            <h2>{editingTask !== null ? "Edit Task" : "Add New Task"}</h2>
+            <div className="mb-3 row">
+              <label className="col-sm-2 col-form-label">Title</label>
+              <div className="col-sm-10">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Title"
+                  value={newTodo.title}
+                  onChange={(e) =>
+                    setNewTodo({ ...newTodo, title: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="mb-3 row">
+              <label className="col-sm-2 col-form-label">Description</label>
+              <div className="col-sm-10">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Description"
+                  value={newTodo.description}
+                  onChange={(e) =>
+                    setNewTodo({ ...newTodo, description: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={newTodo.completed}
+                onChange={(e) =>
+                  setNewTodo({ ...newTodo, completed: e.target.checked })
+                }
+              />
+              <label className="form-check-label">Completed</label>
+            </div>
+            {editingTask !== null ? (
               <button
-                data-task-id={todo._id}
-                className="delete-button"
-                onClick={() => handleDeleteTodo(todo._id)}
+                className="btn btn-primary"
+                onClick={handleEditTodo}
+                disabled={isLoading}
               >
-                Delete
+                {isLoading ? "Updating..." : "Update Task"}
               </button>
-            </li>
-          ))}
-        </ul>
+            ) : (
+              <button
+                className="btn btn-success"
+                onClick={handleAddTodo}
+                disabled={isLoading}
+              >
+                {isLoading ? "Adding..." : "Add Task"}
+              </button>
+            )}
+            {error && <div className="text-danger mt-3">Error: {error.message}</div>}
+          </form>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-md-12">
+          
+          <ul className="list-group">
+            {todos.map((todo) => (
+              <li
+                key={todo._id}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                <div>
+                  <h5>{todo.title}</h5>
+                  <p>{todo.description}</p>
+                  <p>Completed: {todo.completed ? "Yes" : "No"}</p>
+                </div>
+                <div>
+                  <button
+                    className="btn btn-info me-2"
+                    onClick={() => onClickEditTodo(todo)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDeleteTodo(todo._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   )

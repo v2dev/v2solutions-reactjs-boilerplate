@@ -4,7 +4,7 @@ import React from "react"
 
 function RootLayout() {
   // const navigation = useNavigation();
-
+  
   return (
     <>
       <main>
