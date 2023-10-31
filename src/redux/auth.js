@@ -15,15 +15,16 @@ export const login = (email, password) => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+      
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);
         dispatch({ type: 'LOGIN_SUCCESS', payload: data });
         return { success: true }; // Indicate successful login
-
       } else {
-        dispatch({ type: 'LOGIN_FAILURE' });
+        const data = await response.json();
+        
+        dispatch({ type: 'LOGIN_FAILURE' ,error: data.error});
       }
     } catch (error) {
       dispatch({ type: 'LOGIN_FAILURE' });
@@ -34,22 +35,23 @@ export const login = (email, password) => {
 export const register = (email, password, name) => {
 return async (dispatch) => {
     try {
-    // Make the API call for registration
-    const response = await fetch(API_BASE_URL + "/register", {
-        method: "POST",
-        headers: {
-        "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password, name }),
-    });
+      
+      const response = await fetch(API_BASE_URL + "/register", {
+          method: "POST",
+          headers: {
+          "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password, name }),
+      });
 
-    if (response.ok) {
+      if (!response.error) {
         dispatch({ type: 'REGISTER_SUCCESS' });
-    } else {
+        return redirect('/auth');
+      } else {
         dispatch({ type: 'REGISTER_FAILURE' });
     }
     } catch (error) {
-    dispatch({ type: 'REGISTER_FAILURE' });
+      dispatch({ type: 'REGISTER_FAILURE' });
     }
 };
 };
@@ -124,11 +126,12 @@ const initialState = {
           error: null,
         };
       case 'LOGIN_FAILURE':
+
         return {
           ...state,
           user: null,
           loggedIn: false,
-          error: 'Login failed',
+          error: action.error || 'Login failed',
         };
       case 'REGISTER_SUCCESS':
         // Handle registration success

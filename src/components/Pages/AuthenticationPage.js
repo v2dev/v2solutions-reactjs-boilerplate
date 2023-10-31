@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React ,{ useState } from "react"
-
+import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { login, register } from '../../redux/auth';
 import { useNavigate } from 'react-router-dom';
@@ -8,23 +6,27 @@ import { useNavigate } from 'react-router-dom';
 function AuthenticationPage() {
   const dispatch = useDispatch();
   const { loggedIn, error } = useSelector(state => state.auth) || {};
-  const [loginMode, setLoginMode] = useState(true); 
+  const [loginMode, setLoginMode] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const { email, password, name } = formData;
+
+    // Simple form validation
+    if (!email || !password || (!loginMode && !name)) {
+      alert("Please fill in all the fields.");
+      return;
+    }
+
     if (loginMode) {
-      const { email, password } = formData;
-      
       const loginResult = await dispatch(login(email, password));
-      if (loginResult.success) {
+      if (loginResult &&  loginResult.success) {
         navigate("/"); // Redirect after successful login
       }
-
     } else {
-      const { name, email, password } = formData;
       dispatch(register(email, password, name)); // Dispatch the register action
     }
   };
@@ -86,6 +88,3 @@ function AuthenticationPage() {
 }
 
 export default AuthenticationPage;
-
-
-

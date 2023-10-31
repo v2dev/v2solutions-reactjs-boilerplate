@@ -3,12 +3,16 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../../../redux/auth"; // Assuming you have an action for logout
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
 function Header({ isAuthenticated, logoutUser }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     logoutUser(dispatch); // Dispatch the logout action
+    navigate("/");
   };
 
   return (
