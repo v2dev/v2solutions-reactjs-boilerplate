@@ -44,11 +44,13 @@ return async (dispatch) => {
           body: JSON.stringify({ email, password, name }),
       });
 
-      if (!response.error) {
+      if (response.ok) {
         dispatch({ type: 'REGISTER_SUCCESS' });
         return redirect('/auth');
       } else {
-        dispatch({ type: 'REGISTER_FAILURE' });
+        const data = await response.json();
+        
+        dispatch({ type: 'REGISTER_FAILURE' ,error: data.error});
     }
     } catch (error) {
       dispatch({ type: 'REGISTER_FAILURE' });
@@ -134,11 +136,14 @@ const initialState = {
           error: action.error || 'Login failed',
         };
       case 'REGISTER_SUCCESS':
-        // Handle registration success
-        return state; // Update state as required
+      return state; 
       case 'REGISTER_FAILURE':
-        // Handle registration failure
-        return state; // Update state as required
+        return {
+          ...state,
+          user: null,
+          loggedIn: false,
+          error: action.error || 'REGISTER_FAILURE',
+        };
       case 'LOGOUT':
         
         return {

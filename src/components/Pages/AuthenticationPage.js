@@ -38,7 +38,7 @@ function AuthenticationPage() {
 
   return (
     <div className="container mt-5">
-      {error && <p className="text-danger">{error}</p>}
+      
       {!loggedIn ? (
         <div className="row justify-content-center">
           <div className="col-md-6">
@@ -47,6 +47,7 @@ function AuthenticationPage() {
                 <h2 className="text-center mb-4">{loginMode ? 'Login' : 'Sign Up'}</h2>
 
                 <form onSubmit={handleSubmit}>
+                  {error && <p className="text-danger text-center">{error}</p>}
                   {!loginMode && (
                     <div className="mb-3">
                       <label htmlFor="name" className="form-label">Name</label>
