@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from 'react-redux';
-import { verifyTokenAction } from "../../redux/auth";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { resetPasswordAction } from "../../redux/auth";
+import { useParams } from 'react-router-dom';
+
 function ResetPassword() {
     // { token }
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  let { token } = useParams();
+  const error = useSelector(state => state.auth.error);
+  const message = useSelector(state => state.auth.message);
 
-  useEffect(() => {
-    // Dispatch an action to verify the token
-    dispatch(verifyTokenAction(token));
-
-  }, [dispatch, token]);
-
-  const handleResetPassword = async () => {
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
     // Dispatch an action to reset the password
     // Pass 'password' and 'confirmPassword' to the action
-    // dispatch(resetPasswordAction(password, confirmPassword));
+    if (!password && !confirmPassword) {
+      alert("Please fill password .");
+      return;
+    }
+    dispatch(resetPasswordAction(token,password, confirmPassword));
   };
 
   const handleInputChange = (e) => {
@@ -37,6 +41,8 @@ function ResetPassword() {
               <h2 className="text-center mb-4">Reset Password</h2>
 
               <form onSubmit={handleResetPassword}>
+                {error && <p className="text-danger text-center">{error}</p>}
+                {message && <p className="text-success text-center">{message}</p>}
                 <div className="mb-3">
                   <label htmlFor="password" className="form-label">New Password</label>
                   <input type="password" className="form-control" id="password" name="password" value={password} onChange={handleInputChange} />

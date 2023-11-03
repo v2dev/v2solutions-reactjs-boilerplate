@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import { forgetPassword } from "../../redux/auth";
 
 function ForgetPasswordComponent() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
-
+  const error = useSelector(state => state.auth.error);
+  const message = useSelector(state => state.auth.message);
+  
+  
   const handleForgetPassword = async (e) => {
     e.preventDefault();
     if (!email) {
@@ -14,6 +17,7 @@ function ForgetPasswordComponent() {
       return;
     }
     dispatch(forgetPassword(email));
+
   };
 
   const handleInputChange = (e) => {
@@ -27,7 +31,9 @@ function ForgetPasswordComponent() {
             <div className="card">
             <div className="card-body">
                 <h2 className="text-center mb-4">Forget Password</h2>
-
+                {error && <p className="text-danger text-center">{error}</p>}
+                {message && <p className="text-success text-center">{message}</p>}
+                
                 <form onSubmit={handleForgetPassword}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email</label>

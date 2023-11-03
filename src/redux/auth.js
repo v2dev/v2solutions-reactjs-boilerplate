@@ -78,7 +78,7 @@ export const forgetPassword = (email) => {
       
       if (response.ok) {
         const data = await response.json();
-        dispatch({ type: 'FORGET_PW_SUCCESS', payload: data });
+        dispatch({ type: 'FORGET_PW_SUCCESS',  message: data.message });
         return { success: true }; 
       } else {
         const data = await response.json();
@@ -91,25 +91,27 @@ export const forgetPassword = (email) => {
   };
 };
 
-export const verifyTokenAction = (token) => {
+export const resetPasswordAction = (token,password, confirmPassword) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/verify-pw-token/${token}`, {
-        method: "GET",
+      const response = await fetch(`${API_BASE_URL}/reset-pw`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ token,password, confirmPassword }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        dispatch({ type: 'TOKEN_VERIFIED', payload: data }); // Dispatch an action for a successful token verification
+        dispatch({ type: 'PASSWORD_RESET_SUCCESS', message: data.message }); // Dispatch an action for a successful token verification
         return { success: true };
       } else {
-        dispatch({ type: 'TOKEN_VERIFICATION_FAILED' }); // Dispatch an action for token verification failure
+        const data = await response.json();
+        dispatch({ type: 'PASSWORD_RESET_FAILURE' ,error: data.error});
       }
     } catch (error) {
-      dispatch({ type: 'TOKEN_VERIFICATION_FAILED' });
+      dispatch({ type: 'PASSWORD_RESET_FAILURE' });
     }
   };
 };
@@ -194,7 +196,34 @@ const initialState = {
           loggedIn: false,
           error: action.error || 'REGISTER_FAILURE',
         };
-
+      case 'FORGET_PW_SUCCESS':
+        return {
+          ...state,
+          user: null,
+          loggedIn: false,
+          message: action.message || 'FORGET_PW_SUCCESS',
+        };  
+      case 'FORGET_PW_FAIL':
+        return {
+          ...state,
+          user: null,
+          loggedIn: false,
+          error: action.error || 'FORGET_PW_FAIL',
+        };  
+      case 'PASSWORD_RESET_SUCCESS':
+        return {
+          ...state,
+          user: null,
+          loggedIn: false,
+          message: action.message || 'PASSWORD_RESET_SUCCESS',
+        };  
+      case 'PASSWORD_RESET_FAILURE':
+        return {
+          ...state,
+          user: null,
+          loggedIn: false,
+          error: action.error || 'PASSWORD_RESET_FAILURE',
+        };    
       case 'LOGOUT':
         
         return {
