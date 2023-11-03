@@ -3,8 +3,6 @@ import { redirect } from "react-router-dom";
 import API_BASE_URL from "../configs/apiBaseUrl"
 
 export const login = (email, password) => {
-  
-
   return async (dispatch) => {
     try {
       // Make the API call for login
@@ -65,6 +63,58 @@ export const logoutUser = (dispatch) => {
     return redirect('/auth');
   };
 };
+
+export const forgetPassword = (email) => {
+  return async (dispatch) => {
+    try {
+      // Make the API call for login
+      const response = await fetch(API_BASE_URL + "/forget-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        dispatch({ type: 'FORGET_PW_SUCCESS', payload: data });
+        return { success: true }; 
+      } else {
+        const data = await response.json();
+        
+        dispatch({ type: 'FORGET_PW_FAIL' ,error: data.error});
+      }
+    } catch (error) {
+      dispatch({ type: 'FORGET_PW_FAIL' });
+    }
+  };
+};
+
+export const verifyTokenAction = (token) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/verify-pw-token/${token}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        dispatch({ type: 'TOKEN_VERIFIED', payload: data }); // Dispatch an action for a successful token verification
+        return { success: true };
+      } else {
+        dispatch({ type: 'TOKEN_VERIFICATION_FAILED' }); // Dispatch an action for token verification failure
+      }
+    } catch (error) {
+      dispatch({ type: 'TOKEN_VERIFICATION_FAILED' });
+    }
+  };
+};
+
+
 export const checkAuthLoader = (dispatch) => {
   
   return () => {
@@ -144,6 +194,7 @@ const initialState = {
           loggedIn: false,
           error: action.error || 'REGISTER_FAILURE',
         };
+
       case 'LOGOUT':
         
         return {

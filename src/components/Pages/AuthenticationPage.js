@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { login, register } from '../../redux/auth';
 import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function AuthenticationPage() {
   const dispatch = useDispatch();
   const { loggedIn, error } = useSelector(state => state.auth) || {};
   const [loginMode, setLoginMode] = useState(true);
+  
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
 
@@ -36,6 +38,7 @@ function AuthenticationPage() {
     setFormData({ ...formData, [name]: value });
   };
 
+
   return (
     <div className="container mt-5">
       
@@ -59,12 +62,12 @@ function AuthenticationPage() {
                     <label htmlFor="email" className="form-label">Email</label>
                     <input type="email" className="form-control" id="email" name="email" value={formData.email} onChange={handleInputChange} />
                   </div>
-
+                  
                   <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
                     <input type="password" className="form-control" id="password" name="password" value={formData.password} onChange={handleInputChange} />
                   </div>
-
+                  
                   <button type="submit" className="btn btn-primary">{loginMode ? 'Login' : 'Sign Up'}</button>
                 </form>
 
@@ -74,8 +77,12 @@ function AuthenticationPage() {
                     : 'Already have an account? '}
                   <span className="text-primary" onClick={() => setLoginMode(!loginMode)}>
                     {loginMode ? 'Sign Up' : 'Login'}
-                  </span>
+                  </span> | 
+                  <span className="text-primary ms-1">
+                     <Link to="/forget-password" >Forget Password</Link>
+                   </span>
                 </p>
+
               </div>
             </div>
           </div>
