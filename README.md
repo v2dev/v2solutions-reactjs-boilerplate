@@ -28,6 +28,10 @@ npm install
 # or
 yarn install
 
+
+## Usage
+Explain how to run the project locally.
+
 npm start
 # or
 yarn start
