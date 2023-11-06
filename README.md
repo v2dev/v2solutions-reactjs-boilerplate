@@ -22,7 +22,7 @@ List any software, tools, or dependencies needed to run the project.
 ```bash
 git clone https://github.com/v2shashikant/react-boilerplate.git
 
-cd project-name
+cd react-boilerplate
 
 npm install
 # or
