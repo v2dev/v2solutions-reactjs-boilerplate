@@ -27,13 +27,13 @@ cd project-name
 npm install
 # or
 yarn install
-
+```
 
 ## Usage
 Explain how to run the project locally.
 
+```bash
 npm start
 # or
 yarn start
-
-
+```
