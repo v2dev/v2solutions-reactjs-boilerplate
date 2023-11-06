@@ -13,6 +13,11 @@ function AuthenticationPage() {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
 
+
+  const clearForm = () => {
+    setFormData({ name: '', email: '', password: '' });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,6 +42,7 @@ function AuthenticationPage() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
   };
 
   const responseMessage = (response) => {
@@ -44,6 +50,11 @@ function AuthenticationPage() {
   };
   const errorMessage = (error) => {
       console.log(error);
+  };
+  
+  const handleModeChange = (mode) => {
+    setLoginMode(mode);
+    clearForm(); // Clear form fields when changing mode
   };
 
   return (
@@ -82,9 +93,9 @@ function AuthenticationPage() {
                   {loginMode
                     ? "Don't have an account? "
                     : 'Already have an account? '}
-                  <span className="text-primary" onClick={() => setLoginMode(!loginMode)}>
+                  <Link ><span className="text-primary" onClick={() => handleModeChange(!loginMode)}>
                     {loginMode ? 'Sign Up' : 'Login'}
-                  </span> | 
+                  </span> | </Link>
                   <span className="text-primary ms-1">
                      <Link to="/forget-password" >Forget Password</Link>
                    </span>

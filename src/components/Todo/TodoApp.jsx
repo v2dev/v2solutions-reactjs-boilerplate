@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import useCrudApi from "../../hooks/useCrudApi"
 import API_ENDPOINTS from "../../configs/apiConfig"
 import { connect } from "react-redux"
-import { setTodos, addTodo, updateTodo, deleteTodo } from "../../redux/todos"
+import {
+  setTodos as setTodosAction,
+  addTodo as addTodoAction,
+  updateTodo as updateTodoAction,
+  deleteTodo as deleteTodoAction
+} from "../../redux/todos"; // Import your actions
 
 function TodoApp(props) {
   const apiEndpoint = API_ENDPOINTS.TODOS
@@ -10,6 +15,7 @@ function TodoApp(props) {
   const { addTodo, updateTodo, deleteTodo } = props
   const { todos, fetchData, postData, updateData, deleteData, isLoading, error } =
     useCrudApi(apiEndpoint)
+  const [errorState, setErrorState] = useState(null);
 
   const [newTodo, setNewTodo] = useState({
     title: "",
@@ -17,18 +23,23 @@ function TodoApp(props) {
     completed: false,
   })
   const [editingTask, setEditingTask] = useState(null)
+  
 
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  const handleAddTodo = async () => {
+  const handleAddTodo = async (e) => {
+    e.preventDefault();
+    if (!newTodo.title || !newTodo.description) {
+      setErrorState("Please fill in both title and description.");
+      return;
+    }
+    
     try {
       const response = await postData(newTodo)
       if (response && !response.error) {
         addTodo(response.todo)
         setNewTodo({ title: "", description: "", completed: false })
         fetchData()
+        setErrorState(null); // Reset error state if successful
+
       } else if (response && response.error) {
         // Handle errors if response is defined
         console.log("API Error:", response.error)
@@ -71,6 +82,7 @@ function TodoApp(props) {
       console.log("Error deleting task:", error)
     }
   }
+
   const onClickEditTodo = (todo) => {
     setNewTodo({
       title: todo.title,
@@ -85,8 +97,11 @@ function TodoApp(props) {
       <div className="row mb-4">
         <div className="col-md-6 ">
           <form>
+            
             <h2>{editingTask !== null ? "Edit Task" : "Add New Task"}</h2>
+            {errorState && <div className="text-danger mt-3">{errorState}</div>}
             <div className="mb-3 row">
+              
               <label className="col-sm-2 col-form-label">Title</label>
               <div className="col-sm-10">
                 <input
@@ -187,10 +202,11 @@ function TodoApp(props) {
 const mapStateToProps = (state) => ({
   todos: state.todos.todos,
 })
+const mapDispatchToProps = {
+  setTodos: setTodosAction,
+  addTodo: addTodoAction,
+  updateTodo: updateTodoAction,
+  deleteTodo: deleteTodoAction,
+};
 
-export default connect(mapStateToProps, {
-  setTodos,
-  addTodo,
-  updateTodo,
-  deleteTodo,
-})(TodoApp)
+export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
