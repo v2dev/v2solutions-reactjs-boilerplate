@@ -28,9 +28,9 @@ npm install
 # or
 yarn install
 ```
-
 ## Usage
-Explain how to run the project locally.
+
+2. Explain how to run the project locally.
 
 ```bash
 npm start
