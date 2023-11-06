@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, register } from '../../redux/auth';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { GoogleLogin } from '@react-oauth/google';
 
 function AuthenticationPage() {
   const dispatch = useDispatch();
@@ -38,6 +39,12 @@ function AuthenticationPage() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const responseMessage = (response) => {
+      console.log(response);
+  };
+  const errorMessage = (error) => {
+      console.log(error);
+  };
 
   return (
     <div className="container mt-5">
@@ -82,6 +89,9 @@ function AuthenticationPage() {
                      <Link to="/forget-password" >Forget Password</Link>
                    </span>
                 </p>
+
+                <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+    
 
               </div>
             </div>
