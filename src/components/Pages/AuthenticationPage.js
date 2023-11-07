@@ -12,36 +12,53 @@ function AuthenticationPage() {
   
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const navigate = useNavigate();
+  const [formErrors, setFormErrors] = useState({});
 
 
   const clearForm = () => {
     setFormData({ name: '', email: '', password: '' });
+    setFormErrors({}); // Clear form errors
+
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    // Validate each field
+    if (!formData.email) {
+      errors.email = "Email is required";
+    }
+    if (!formData.password) {
+      errors.password = "Password is required";
+    }
+    if (!loginMode && !formData.name) {
+      errors.name = "Name is required for sign up";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0; // If no errors, the form is valid
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { email, password, name } = formData;
-
-    // Simple form validation
-    if (!email || !password || (!loginMode && !name)) {
-      alert("Please fill in all the fields.");
-      return;
-    }
-
-    if (loginMode) {
-      const loginResult = await dispatch(login(email, password));
-      if (loginResult &&  loginResult.success) {
-        navigate("/"); // Redirect after successful login
+    if (validateForm()) {
+      const { email, password, name } = formData;
+      if (loginMode) {
+        const loginResult = await dispatch(login(email, password));
+        if (loginResult &&  loginResult.success) {
+          navigate("/"); // Redirect after successful login
+        }
+      } else {
+        dispatch(register(email, password, name)); // Dispatch the register action
       }
-    } else {
-      dispatch(register(email, password, name)); // Dispatch the register action
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setFormErrors({ ...formErrors, [name]: "" }); 
 
   };
 
@@ -72,19 +89,53 @@ function AuthenticationPage() {
                   {!loginMode && (
                     <div className="mb-3">
                       <label htmlFor="name" className="form-label">Name</label>
-                      <input type="text" className="form-control" id="name" name="name" value={formData.name} onChange={handleInputChange} />
+                      <input
+                        type="text"
+                        className={`form-control ${formErrors.name && "is-invalid"}`}
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        
+                      />
+                      <div className={`invalid-feedback ${formErrors.name ? "d-block" : ""}`}>
+                        {formErrors.name}
+                      </div>
                     </div>
                   )}
 
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="email" name="email" value={formData.email} onChange={handleInputChange} />
+                    <input
+                      type="email"
+                      className={`form-control ${formErrors.email && "is-invalid"}`}
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      
+                    />
+                    <div className={`invalid-feedback ${formErrors.email ? "d-block" : ""}`}>
+                      {formErrors.email}
+                    </div>
                   </div>
                   
                   <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="password" name="password" value={formData.password} onChange={handleInputChange} />
+                    <input
+                      type="password"
+                      className={`form-control ${formErrors.password && "is-invalid"}`}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      
+                    />
+                    <div className={`invalid-feedback ${formErrors.password ? "d-block" : ""}`}>
+                      {formErrors.password}
+                    </div>
                   </div>
+
                   
                   <button type="submit" className="btn btn-primary">{loginMode ? 'Login' : 'Sign Up'}</button>
                 </form>

@@ -11,16 +11,32 @@ function ResetPassword() {
   let { token } = useParams();
   const error = useSelector(state => state.auth.error);
   const message = useSelector(state => state.auth.message);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     // Dispatch an action to reset the password
     // Pass 'password' and 'confirmPassword' to the action
-    if (!password && !confirmPassword) {
-      alert("Please fill password .");
-      return;
+    if (validateForm()) {
+      dispatch(resetPasswordAction(token,password, confirmPassword));
     }
-    dispatch(resetPasswordAction(token,password, confirmPassword));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    // Validate each field
+    if (!password) {
+      errors.password = "Pasword is required";
+    }
+    if (!confirmPassword) {
+      errors.confirmPassword = "Confirm Pasword is required";
+    }
+    if (password != confirmPassword) {
+      errors.confirmPassword = "Confirm Pasword is not match";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0; // If no errors, the form is valid
   };
 
   const handleInputChange = (e) => {
@@ -45,12 +61,18 @@ function ResetPassword() {
                 {message && <p className="text-success text-center">{message}</p>}
                 <div className="mb-3">
                   <label htmlFor="password" className="form-label">New Password</label>
-                  <input type="password" className="form-control" id="password" name="password" value={password} onChange={handleInputChange} />
+                  <input type="password"  className={`form-control ${formErrors.password && "is-invalid"}`} id="password" name="password" value={password} onChange={handleInputChange} />
+                  <div className={`invalid-feedback ${formErrors.password ? "d-block" : ""}`}>
+                      {formErrors.password}
+                    </div>
                 </div>
 
                 <div className="mb-3">
                   <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
-                  <input type="password" className="form-control" id="confirmPassword" name="confirmPassword" value={confirmPassword} onChange={handleInputChange} />
+                  <input type="password"  className={`form-control ${formErrors.confirmPassword && "is-invalid"}`} id="confirmPassword" name="confirmPassword" value={confirmPassword} onChange={handleInputChange} />
+                  <div className={`invalid-feedback ${formErrors.confirmPassword ? "d-block" : ""}`}>
+                      {formErrors.confirmPassword}
+                    </div>
                 </div>
 
                 <button type="submit" className="btn btn-primary">Reset Password</button>

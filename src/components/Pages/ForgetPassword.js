@@ -8,16 +8,27 @@ function ForgetPasswordComponent() {
   const [email, setEmail] = useState('');
   const error = useSelector(state => state.auth.error);
   const message = useSelector(state => state.auth.message);
-  
+  const [formErrors, setFormErrors] = useState({});
   
   const handleForgetPassword = async (e) => {
     e.preventDefault();
-    if (!email) {
-      alert("Please fill email.");
-      return;
+    if (validateForm()) {
+      dispatch(forgetPassword(email));
+      setEmail('')
     }
-    dispatch(forgetPassword(email));
+    
 
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    // Validate each field
+    if (!email) {
+      errors.email = "Email is required";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0; // If no errors, the form is valid
   };
 
   const handleInputChange = (e) => {
@@ -36,8 +47,19 @@ function ForgetPasswordComponent() {
                 
                 <form onSubmit={handleForgetPassword}>
                 <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="email" name="email" value={email} onChange={handleInputChange} />
+                <label htmlFor="email" className="form-label">Email</label>
+                    <input
+                      type="email"
+                      className={`form-control ${formErrors.email && "is-invalid"}`}
+                      id="email"
+                      name="email"
+                      value={email}
+                      onChange={handleInputChange}
+                      
+                    />
+                    <div className={`invalid-feedback ${formErrors.email ? "d-block" : ""}`}>
+                      {formErrors.email}
+                    </div>
                 </div>
 
                 <button type="submit" className="btn btn-primary">Submit</button>
