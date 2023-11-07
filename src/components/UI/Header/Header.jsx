@@ -37,6 +37,11 @@ function Header({ isAuthenticated, logoutUser }) {
                 Home
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/employee/add" className="nav-link" aria-current="page">
+                Add Employee
+              </Link>
+            </li>
             {isAuthenticated ? (
               <li>
                 <button onClick={handleLogout}>Logout</button>

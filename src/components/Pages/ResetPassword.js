@@ -26,9 +26,15 @@ function ResetPassword() {
     const errors = {};
     
     // Validate each field
+    
+
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     if (!password) {
-      errors.password = "Pasword is required";
+      errors.password = "Password is required";
+    } else if (!passwordRegex.test(password)) {
+      errors.password = "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number";
     }
+    
     if (!confirmPassword) {
       errors.confirmPassword = "Confirm Pasword is required";
     }

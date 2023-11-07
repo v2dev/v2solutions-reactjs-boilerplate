@@ -113,6 +113,7 @@ function TodoApp(props) {
                     setNewTodo({ ...newTodo, title: e.target.value })
                   }
                 />
+                
               </div>
             </div>
             <div className="mb-3 row">

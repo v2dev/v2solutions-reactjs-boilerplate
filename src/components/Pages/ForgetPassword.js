@@ -24,8 +24,11 @@ function ForgetPasswordComponent() {
     const errors = {};
     
     // Validate each field
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
       errors.email = "Email is required";
+    } else if (!emailRegex.test(email)) {
+      errors.email = "Invalid email format";
     }
     setFormErrors(errors);
     return Object.keys(errors).length === 0; // If no errors, the form is valid

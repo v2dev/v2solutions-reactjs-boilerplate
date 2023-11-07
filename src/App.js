@@ -4,7 +4,10 @@ import {checkAuthLoader} from './redux/auth'
 import { useDispatch } from 'react-redux';
 import RootLayout from "./components/Pages/RootLayout";
 // import ErrorPage from "./components/Pages/ErrorPage";
-import TodoPage from "./components/Pages/TodoPage";
+// import TodoPage from "./components/Pages/TodoPage";
+import EmployeeFormPage from "./components/Pages/EmployeeFormPage" 
+import EmployeeListPage from "./components/Pages/EmployeeListPage" 
+
 import AuthenticationPage from "./components/Pages/AuthenticationPage";
 import ForgetPassword from "./components/Pages/ForgetPassword";
 import ResetPassword from "./components/Pages/ResetPassword";
@@ -34,7 +37,13 @@ function App() {
       children: [
         {
           index: true,  // Define your protected route
-          element: <TodoPage />,
+          element: <EmployeeListPage />,
+          loader:checkAuthLoader(dispatch)
+          
+        },
+        {
+          path: "employee/add",
+          element: <EmployeeFormPage />,
           loader:checkAuthLoader(dispatch)
           
         },

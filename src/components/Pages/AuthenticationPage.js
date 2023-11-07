@@ -25,12 +25,21 @@ function AuthenticationPage() {
     const errors = {};
     
     // Validate each field
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email) {
       errors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = "Invalid email format";
     }
+  
+    // Password validation
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     if (!formData.password) {
       errors.password = "Password is required";
+    } else if (!passwordRegex.test(formData.password)) {
+      errors.password = "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number";
     }
+  
     if (!loginMode && !formData.name) {
       errors.name = "Name is required for sign up";
     }
@@ -107,7 +116,7 @@ function AuthenticationPage() {
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email</label>
                     <input
-                      type="email"
+                      type="text"
                       className={`form-control ${formErrors.email && "is-invalid"}`}
                       id="email"
                       name="email"
