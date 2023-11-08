@@ -27,7 +27,7 @@ const useCrudApi = (apiEndpoint) => {
   const postData = async (newData) => {
     try {
       const response = await axios.post(API_BASE_URL + apiEndpoint, newData)
-      return response.data
+      return response
     } catch (error) {
       return error
     }
@@ -39,7 +39,7 @@ const useCrudApi = (apiEndpoint) => {
         `${API_BASE_URL}${apiEndpoint}/${itemId}`,
         updatedData,
       )
-      return response.data
+      return response
 
     } catch (error) {
       return error
@@ -49,7 +49,7 @@ const useCrudApi = (apiEndpoint) => {
   const deleteData = async (itemId) => {
     try {
       const response = await axios.delete(`${API_BASE_URL}${apiEndpoint}/${itemId}`)
-      return response.data
+      return response
     } catch (error) {
       return error
     }

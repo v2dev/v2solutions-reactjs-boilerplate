@@ -38,9 +38,11 @@ const EmployeeList = () => {
 
 
   return (
-    <div className="container mt-5">
+    <div className="container my-5">
+      
       <div className="row justify-content-center">
-        <div className="col-md-10">
+        <div className="col-md-12">
+          <h2 className='text-center'><strong> Employee Managment </strong></h2>
           <div className="card">
             <div className="card-body">
               <div className="mb-3">
@@ -52,16 +54,16 @@ const EmployeeList = () => {
                 />
               </div>
 
-              <table className="table">
+              <table className="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th onClick={() => handleSort('name')}>Name</th>
-                    <th onClick={() => handleSort('email')}>Email</th>
-                    <th onClick={() => handleSort('dob')}>Date of Birth</th>
-                    <th onClick={() => handleSort('designation')}>Designation</th>
-                    <th onClick={() => handleSort('education')}>Education</th>
-                    <th onClick={() => handleSort('address')}>Address</th>
-                    <th>Actions</th>
+                    <th className="col-md-2" onClick={() => handleSort('name')}>Name</th>
+                    <th className="col-md-2" onClick={() => handleSort('email')}>Email</th>
+                    {/* <th className="col-md-1" onClick={() => handleSort('dob')}>Date of Birth</th> */}
+                    <th className="col-md-1" onClick={() => handleSort('designation')}>Designation</th>
+                    <th className="col-md-2" onClick={() => handleSort('education')}>Education</th>
+                    {/* <th className="col-md-2" onClick={() => handleSort('address')}>Address</th> */}
+                    <th className="col-md-2">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -69,12 +71,12 @@ const EmployeeList = () => {
                     <tr key={employee.emp_id}>
                       <td>{employee.name}</td>
                       <td>{employee.email}</td>
-                      <td>{employee.dob}</td>
+                      {/* <td>{employee.dob}</td> */}
                       <td>{employee.designation}</td>
                       <td>{employee.education}</td>
-                      <td>{employee.address}</td>
+                      {/* <td>{employee.address}</td> */}
                       <td>
-                        <Link  className="btn btn-primary me-1" to={`/edit-employee/${employee._id}`}>Edit</Link>
+                        <Link  className="btn btn-primary m-1" to={`/edit-employee/${employee._id}`}>Edit</Link>
                         <button  className="btn btn-danger" >Delete</button>
                       </td>
                     </tr>

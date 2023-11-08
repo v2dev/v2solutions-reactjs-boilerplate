@@ -6,7 +6,9 @@
   justify-content: space-between; /* Align logo and company name */
   align-items: center; /* Center vertically */
 }
-
+nav.navbar.navbar-expand-lg.navbar-dark {
+  background: #101044;
+}
 .logo-name {
   font-size: 24px;
   font-weight: bold;

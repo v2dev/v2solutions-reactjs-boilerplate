@@ -7,12 +7,15 @@ import {
   addEmployee as addEmployeeAction,
 } from "../../redux/employee"; // Import your actions
 import { useDispatch } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 
 
 const EmployeeForm = (props) => {
   const apiEndpoint = API_ENDPOINTS.EMPLOYEES
   const dispatch = useDispatch();
+  const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
   const {  postData } = useCrudApi(apiEndpoint)
 
@@ -70,12 +73,18 @@ const EmployeeForm = (props) => {
       try {
         
         const response = await postData(employeeData)
-        
-        if (response.ok) {
+        console.log(response.data);
+        if (response.data.employee) {
           dispatch(addEmployeeAction(response.data)); 
+          setSuccessMessage('Employee added successfully!');
+          setTimeout(() => {
+            setSuccessMessage('');
+            navigate("/"); // Redirect after successful login
+          }, 5000); // Redirect after 3 seconds
         } else {
           
           console.error('Failed to add employee');
+            
         }
       } catch (error) {
         console.error('Error adding employee:', error);
@@ -93,7 +102,8 @@ const EmployeeForm = (props) => {
             <div className="card-body">
               <h2 className="text-center mb-4">Employee Form</h2>
               <form onSubmit={handleSubmit}>
-                
+              {successMessage && <div className="alert alert-success">{successMessage}</div>}
+
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">Name</label>
                   <input
