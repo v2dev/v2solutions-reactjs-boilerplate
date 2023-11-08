@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import API_ENDPOINTS from "../../configs/apiConfig"
 import useCrudApi from "../../hooks/useCrudApi"
 
 import { connect } from "react-redux"
-import {
-  addEmployee as addEmployeeAction,
-} from "../../redux/employee"; // Import your actions
-import { useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { addEmployee as addEmployeeAction, updateEmployee as updateEmployeeAction } from "../../redux/employee";
+import { useNavigate, useParams } from 'react-router-dom';
 
 
+const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
 
-const EmployeeForm = (props) => {
   const apiEndpoint = API_ENDPOINTS.EMPLOYEES
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
-
-  const {  postData } = useCrudApi(apiEndpoint)
+  const { id } = useParams();
+  const { postData, updateData,getData } = useCrudApi(apiEndpoint);
 
   const [employeeData, setEmployeeData] = useState({
     emp_id: '',
@@ -29,14 +26,52 @@ const EmployeeForm = (props) => {
     address: '',
   });
   const [formErrors, setFormErrors] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
 
+  useEffect(() => {
+    if (id) {
+      fetchEmployeeData();
+    }
+  }, [id, employees, navigate]);
 
+  const fetchEmployeeData = async () => {
+    try {
+      const response = await getData(`/${id}`); // Use the API to fetch employee data by ID
+      if (response && !response.error) {
+        const formattedEmployeeData = { ...response };
+        formattedEmployeeData.dob = new Date(response.dob).toISOString().split('T')[0]; // Format the date here
+        setEmployeeData(formattedEmployeeData);
+        setIsEdit(true); // Set the form as in "edit" mode
+      } else {
+        // Handle when the employee with the given 'id' is not found
+        // navigate('/'); // Redirect to the list page or show an error page
+      }
+    } catch (error) {
+      // Handle the API request error
+      console.error("Error fetching employee data:", error);
+      // navigate('/'); // Redirect to the list page or show an error page
+    }
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
     setEmployeeData({ ...employeeData, [name]: value });
-    setFormErrors({ ...formErrors, [name]: "" });
+    if (name === 'dob') {
+      
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!value.match(dateRegex)) {
+        setFormErrors({ ...formErrors, [name]: 'Invalid date format. Use YYYY-MM-DD' });
+      } else {
+        setFormErrors({ ...formErrors, [name]: '' });
+      }
+    } else {
+      setFormErrors({ ...formErrors, [name]: '' });
+    }
+    
 
+    setFormErrors({ ...formErrors, [name]: '' });
   };
+
 
   const validateForm = () => {
     const errors = {};
@@ -61,35 +96,46 @@ const EmployeeForm = (props) => {
     if (!employeeData.address) {
       errors.address = "Address is required";
     }
+    
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!employeeData.dob.match(dateRegex)) {
+      errors.dob = 'Invalid date format. Use YYYY-MM-DD';
+    }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0; // If no errors, the form is valid
   };
 
-  const handleSubmit = async  (e) => {
-    
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validateForm()) {
       try {
-        
-        const response = await postData(employeeData)
-        console.log(response.data);
-        if (response.data.employee) {
-          dispatch(addEmployeeAction(response.data)); 
-          setSuccessMessage('Employee added successfully!');
-          setTimeout(() => {
-            setSuccessMessage('');
-            navigate("/"); // Redirect after successful login
-          }, 5000); // Redirect after 3 seconds
+        let response;
+        if (isEdit) {
+          response = await updateData(`${id}`,employeeData);
+          updateEmployee(response.data);
         } else {
-          
-          console.error('Failed to add employee');
-            
+          response = await postData(employeeData);
+          addEmployee(response.data);
         }
+
+        setEmployeeData({
+          emp_id: '',
+          name: '',
+          email: '',
+          dob: '',
+          designation: '',
+          education: '',
+          address: '',
+        });
+
+        // Show success message and redirect after adding/editing the employee
+        navigate('/', { state: { successMessage: 'Employee added/updated successfully' } });
       } catch (error) {
-        console.error('Error adding employee:', error);
-      
-      }  
+        console.error('Error adding/updating employee:', error);
+        // Handle error scenarios, e.g., show an error message
+      }
     }
   };
 
@@ -100,9 +146,9 @@ const EmployeeForm = (props) => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-              <h2 className="text-center mb-4">Employee Form</h2>
+              <h2 className="text-center mb-4">{isEdit ? 'Edit Employee' : 'Add Employee'}</h2>
               <form onSubmit={handleSubmit}>
-              {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">Name</label>
@@ -134,7 +180,7 @@ const EmployeeForm = (props) => {
                 <div className="mb-3">
                   <label htmlFor="dob" className="form-label">Date of Birth</label>
                   <input
-                    type="date"
+                    type="text"
                     className={`form-control ${formErrors.dob ? "is-invalid" : ""}`}
                     id="dob"
                     name="dob"
@@ -184,7 +230,9 @@ const EmployeeForm = (props) => {
         
                 </div>
                 
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
+                {isEdit ? 'Update' : 'Add'}
+              </button>
               </form>
             </div>
           </div>
@@ -200,5 +248,6 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = {
   addEmployee: addEmployeeAction,
+  updateEmployee: updateEmployeeAction,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeeForm);

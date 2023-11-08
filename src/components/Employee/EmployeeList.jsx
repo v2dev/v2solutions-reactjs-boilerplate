@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useLocation} from 'react-router-dom';
 import API_ENDPOINTS from "../../configs/apiConfig"
 import useCrudApi from "../../hooks/useCrudApi"
 
@@ -7,10 +7,20 @@ const EmployeeList = () => {
   const apiEndpoint = API_ENDPOINTS.EMPLOYEES
   const {  fetchData } = useCrudApi(apiEndpoint)
   const [employees, setEmployees] = useState([]);
+  const location = useLocation();
+  const [successMessage, setSuccessMessage] = useState(location.state && location.state.successMessage);
 
   useEffect(() => {
     fetchEmpData();
-  }, []);
+    const timer = setTimeout(() => {
+      setSuccessMessage('');
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer); // Clear the timer on component unmount
+    };
+    
+  }, [successMessage]);
 
   const fetchEmpData = async () => {
 
@@ -44,7 +54,13 @@ const EmployeeList = () => {
         <div className="col-md-12">
           <h2 className='text-center'><strong> Employee Managment </strong></h2>
           <div className="card">
+            
             <div className="card-body">
+              {successMessage && ( // Conditionally render the success message
+                <div className="alert alert-success">
+                  {successMessage}
+                </div>
+              )}
               <div className="mb-3">
                 <input
                   type="text"
@@ -76,7 +92,7 @@ const EmployeeList = () => {
                       <td>{employee.education}</td>
                       {/* <td>{employee.address}</td> */}
                       <td>
-                        <Link  className="btn btn-primary m-1" to={`/edit-employee/${employee._id}`}>Edit</Link>
+                        <Link  className="btn btn-primary m-1" to={`/employee/edit/${employee._id}`}>Edit</Link>
                         <button  className="btn btn-danger" >Delete</button>
                       </td>
                     </tr>

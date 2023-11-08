@@ -33,6 +33,21 @@ const useCrudApi = (apiEndpoint) => {
     }
   }
 
+  const getData = async (param) => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+
+      const response = await axios.get(API_BASE_URL + apiEndpoint + param)
+      return response.data
+    } catch (error) {
+      setError(error)
+    }
+
+    setIsLoading(false)
+  }
+
   const updateData = async (itemId, updatedData) => {
     try {
       const response = await axios.put(
@@ -59,7 +74,7 @@ const useCrudApi = (apiEndpoint) => {
   //   fetchData();
   // }, [apiEndpoint]); // Fetch data when the component mounts or apiEndpoint changes
 
-  return { isLoading, error, fetchData, postData, updateData, deleteData }
+  return { isLoading, error, fetchData, postData, updateData, deleteData,getData }
 }
 
 export default useCrudApi

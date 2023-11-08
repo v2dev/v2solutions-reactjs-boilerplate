@@ -46,6 +46,11 @@ function App() {
           element: <EmployeeFormPage />,
           loader:checkAuthLoader(dispatch)
           
+        },{
+          path: "employee/edit/:id",
+          element: <EmployeeFormPage />,
+          loader:checkAuthLoader(dispatch)
+          
         },
         {
           path: "auth",
