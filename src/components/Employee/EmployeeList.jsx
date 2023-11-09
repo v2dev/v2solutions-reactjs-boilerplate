@@ -13,7 +13,9 @@ const EmployeeList = () => {
   const [deletingEmployee, setDeletingEmployee] = useState(null);
   const [sortBy, setSortBy] = useState('');
   const [sortDirection, setSortDirection] = useState(1); // Default to ascending order
-  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
     fetchEmpData();
     const timer = setTimeout(() => {
@@ -26,12 +28,14 @@ const EmployeeList = () => {
     
   }, [successMessage]);
 
-  const fetchEmpData = async () => {
+  const fetchEmpData = async (page = 1) => {
 
     try {
-      const response = await fetchData('')
+      const response = await fetchData(`?page=${page}`);
       if (response && !response.error) {
         setEmployees(response.employees)
+        setTotalPages(response.totalPages);
+
       } else if (response && response.error) {
         console.log("API Error:", response.error)
       } else {
@@ -87,6 +91,10 @@ const EmployeeList = () => {
     const year = date.getFullYear();
   
     return `${month}/${day}/${year}`;
+  };
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchEmpData(page);
   };
   
 
@@ -156,6 +164,18 @@ const EmployeeList = () => {
                   ))}
                 </tbody>
               </table>
+              {/* Pagination */}
+              <nav aria-label="Page navigation">
+                <ul className="pagination justify-content-center">
+                  {[...Array(totalPages).keys()].map((page) => (
+                    <li key={page + 1} className={`page-item ${currentPage === page + 1 ? 'active' : ''}`}>
+                      <button className="page-link" onClick={() => handlePageChange(page + 1)}>
+                        {page + 1}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
               {confirmDelete && (
                 <div className="modal" tabIndex="-1" role="dialog" style={{ display: "block" }}>
                   <div className="modal-dialog" role="document">
