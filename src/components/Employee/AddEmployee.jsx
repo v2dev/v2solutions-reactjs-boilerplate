@@ -7,11 +7,12 @@ import { addEmployee as addEmployeeAction, updateEmployee as updateEmployeeActio
 import { useNavigate, useParams } from 'react-router-dom';
 
 
+// eslint-disable-next-line react/prop-types
 const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
 
   const apiEndpoint = API_ENDPOINTS.EMPLOYEES
   // const dispatch = useDispatch();
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage,setSuccessMessage] = useState('');
   const navigate = useNavigate();
   const { id } = useParams();
   const { postData, updateData,getData } = useCrudApi(apiEndpoint);
@@ -27,6 +28,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
   });
   const [formErrors, setFormErrors] = useState({});
   const [isEdit, setIsEdit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (id) {
@@ -44,12 +46,12 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
         setIsEdit(true); // Set the form as in "edit" mode
       } else {
         // Handle when the employee with the given 'id' is not found
-        // navigate('/'); // Redirect to the list page or show an error page
+        navigate('/'); // Redirect to the list page or show an error page
       }
     } catch (error) {
       // Handle the API request error
       console.error("Error fetching employee data:", error);
-      // navigate('/'); // Redirect to the list page or show an error page
+      navigate('/'); // Redirect to the list page or show an error page
     }
   };
   const handleInputChange = (e) => {
@@ -113,13 +115,26 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
       try {
         let response;
         if (isEdit) {
-          response = await updateData(`${id}`,employeeData);
-          updateEmployee(response.data);
+          response = await updateData(`${id}`, employeeData);
+          if (response.error) {
+            setErrorMessage(response.error); // Set the error message received from the API
+          } else {
+            updateEmployee(response.data);
+            setSuccessMessage('Employee updated successfully.');
+            navigate('/', { state: { successMessage: 'Employee updated successfully' } });
+          }
         } else {
           response = await postData(employeeData);
-          addEmployee(response.data);
+          if (response.error) {
+            setErrorMessage(response.error); // Set the error message received from the API
+          } else {
+            addEmployee(response.data);
+            setSuccessMessage('Employee added successfully.');
+            navigate('/', { state: { successMessage: 'Employee added successfully' } });
+          }
         }
 
+        // Reset the form if successful
         setEmployeeData({
           emp_id: '',
           name: '',
@@ -129,15 +144,14 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
           education: '',
           address: '',
         });
-
-        // Show success message and redirect after adding/editing the employee
-        navigate('/', { state: { successMessage: 'Employee added/updated successfully' } });
       } catch (error) {
         console.error('Error adding/updating employee:', error);
-        // Handle error scenarios, e.g., show an error message
+        // Handle other error scenarios and set an appropriate error message
+        setErrorMessage('Failed to add/update employee. Please try again.');
       }
     }
   };
+
 
   return (
     
@@ -149,6 +163,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
               <h2 className="text-center mb-4">{isEdit ? 'Edit Employee' : 'Add Employee'}</h2>
               <form onSubmit={handleSubmit}>
                 {successMessage && <div className="alert alert-success">{successMessage}</div>}
+                {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">Name</label>
