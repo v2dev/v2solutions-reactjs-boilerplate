@@ -41,11 +41,11 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
         setEmployeeData(formattedEmployeeData);
         setIsEdit(true);
       } else {
-        navigate('/');
+        navigate('/employee');
       }
     } catch (error) {
       console.error('Error fetching employee data:', error);
-      navigate('/');
+      navigate('/employee');
     }
   };
 
@@ -77,7 +77,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
           const action = isEdit ? updateEmployee : addEmployee;
           action(response.data);
           setSuccessMessage(`Employee ${isEdit ? 'updated' : 'added'} successfully.`);
-          navigate('/', { state: { successMessage: `Employee ${isEdit ? 'updated' : 'added'} successfully.` } });
+          navigate('/employee', { state: { successMessage: `Employee ${isEdit ? 'updated' : 'added'} successfully.` } });
           setEmployeeData({ emp_id: '', name: '', email: '', dob: '', designation: '', education: '', address: '' });
         }
       } catch (error) {

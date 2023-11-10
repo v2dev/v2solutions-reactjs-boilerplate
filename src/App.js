@@ -12,6 +12,7 @@ import AuthenticationPage from "./components/Pages/AuthenticationPage";
 import ForgetPassword from "./components/Pages/ForgetPassword";
 import ResetPassword from "./components/Pages/ResetPassword";
 import axios from 'axios';
+import HomePage from "./components/Pages/HomePage";
 
 function App() {
 
@@ -36,7 +37,15 @@ function App() {
       // errorElement: <ErrorPage />,
       children: [
         {
-          index: true,  // Define your protected route
+          // index: true, 
+          path: "/",
+          element: <HomePage />,
+          loader:checkAuthLoader(dispatch)
+          
+        },
+        {
+          // index: true, 
+          path: "employee",
           element: <EmployeeListPage />,
           loader:checkAuthLoader(dispatch)
           

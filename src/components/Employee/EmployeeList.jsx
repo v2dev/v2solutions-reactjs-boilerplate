@@ -99,12 +99,10 @@ const EmployeeList = () => {
   };
 
   return (
-    <div className="container my-5">
+    <div className=" my-1">
       <div className="row justify-content-center">
         <div className="col-md-12">
-          <h2 className="text-center">
-            <strong> Employee Management </strong>
-          </h2>
+          
           <div className="card">
             <div className="card-body">
               {successMessage && (

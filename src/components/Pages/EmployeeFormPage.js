@@ -1,18 +1,23 @@
 import React from "react"
 import Header from "../UI/Header/Header"
-import Footer from "../UI/Footer/Footer"
 import AddEmployee from "../Employee/AddEmployee"
+import Breadcrumb from "../UI/Breadcrumb/Breadcrumb";
+
 function EmployeeFormPage() {
   return (
-        <>
-        <div>
-          <Header />
-          <main>
-            <AddEmployee />
-          </main>
-          <Footer />
-        </div> 
-        </>
+    <>
+    <div className="wrapper">
+      <Header />
+      <div id="content">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <div className="container-fluid">
+            <Breadcrumb />
+            </div>
+        </nav>
+          <AddEmployee />
+        </div>
+    </div> 
+    </> 
   );
 }
 
