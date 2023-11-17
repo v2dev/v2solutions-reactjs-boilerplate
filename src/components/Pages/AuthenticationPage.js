@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, register } from '../../redux/auth';
 import { useNavigate, Link } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
 
 function AuthenticationPage() {
   const dispatch = useDispatch();
@@ -142,8 +141,6 @@ function AuthenticationPage() {
                     <Link to="/forget-password">Forget Password</Link>
                   </span>
                 </p>
-
-                <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
               </div>
             </div>
           </div>
