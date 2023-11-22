@@ -1,12 +1,13 @@
 // Define action creators for login and registration
 import { redirect } from "react-router-dom";
 import API_BASE_URL from "../configs/apiBaseUrl"
+import { createSlice } from '@reduxjs/toolkit';
 
 export const login = (email, password) => {
   return async (dispatch) => {
     try {
       // Make the API call for login
-      const response = await fetch(API_BASE_URL + "/login", {
+      const response = await fetch(API_BASE_URL + "/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -19,6 +20,7 @@ export const login = (email, password) => {
         localStorage.setItem('token', data.token);
         dispatch({ type: 'LOGIN_SUCCESS', payload: data });
         return { success: true }; // Indicate successful login
+
       } else {
         const data = await response.json();
         
@@ -31,29 +33,30 @@ export const login = (email, password) => {
 };
   
 export const register = (email, password, name) => {
-return async (dispatch) => {
-    try {
-      
-      const response = await fetch(API_BASE_URL + "/register", {
-          method: "POST",
-          headers: {
-          "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password, name }),
-      });
-
-      if (response.ok) {
-        dispatch({ type: 'REGISTER_SUCCESS' });
-        return redirect('/auth');
-      } else {
-        const data = await response.json();
+  return async (dispatch) => {
+      try {
         
-        dispatch({ type: 'REGISTER_FAILURE' ,error: data.error});
-    }
-    } catch (error) {
-      dispatch({ type: 'REGISTER_FAILURE' });
-    }
-};
+        const response = await fetch(API_BASE_URL + "/user/signup", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password, name }),
+        });
+        
+        if (response.ok) {
+          dispatch({ type: 'REGISTER_SUCCESS' });
+          const data = await response.json();
+          return { qrCodeUrl: data.qrCodeUrl }; 
+        } else {
+          const data = await response.json();
+          
+          dispatch({ type: 'REGISTER_FAILURE' ,error: data.error});
+      }
+      } catch (error) {
+        dispatch({ type: 'REGISTER_FAILURE' });
+      }
+  };
 };
 
 export const logoutUser = (dispatch) => {
@@ -116,6 +119,15 @@ export const resetPasswordAction = (token,password, confirmPassword) => {
   };
 };
 
+export const qrCodeData = (qrCodeUrl)=>{
+  return async (dispatch) => {
+    try {
+        dispatch({ type: 'SELECT_QR_CODE_DATA', qrCodeUrl: qrCodeUrl });
+    } catch (error) {
+      dispatch({ type: 'SELECT_QR_CODE_DATA' });
+    }
+  }
+};
 
 export const checkAuthLoader = (dispatch) => {
   
@@ -134,6 +146,39 @@ export const checkAuthLoader = (dispatch) => {
   
   };
 };
+
+
+export const verifyMFA = (mfaToken,email) => {
+  return async (dispatch) => {
+    try {
+      // Make the API call for MFA verification
+      const response = await fetch(API_BASE_URL + "/user/mfa-verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mfaToken,email }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        localStorage.setItem('token', data.jwtToken);
+        dispatch({ type: 'LOGIN_SUCCESS', payload: data });
+        
+        return { success: true };
+      } else {
+        const data = await response.json();
+        dispatch({ type: 'LOGIN_FAILURE', error: data.error });
+        return { success: false };
+      }
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAILURE' });
+      return { success: false };
+    }
+  };
+};
+
 
 const decodeToken = (token) => {
   const tokenParts = token.split('.'); // Split the token into its parts
@@ -166,77 +211,88 @@ const initialState = {
   user: null,
   loggedIn: false,
   error: null,
+  qrCodeData:null,
+  email:null
 };
-  
-  const authReducer = (state = initialState, action) => {
-    switch (action.type) {
-      case 'LOGIN_SUCCESS':
-        
-        localStorage.setItem('token', action.payload.token); 
-        return {
-          ...state,
-          user: action.payload.user,
-          loggedIn: !isTokenExpired(action.payload.token), 
-          error: null,
-        };
-      case 'LOGIN_FAILURE':
 
-        return {
-          ...state,
-          user: null,
-          loggedIn: false,
-          error: action.error || 'Login failed',
-        };
-      case 'REGISTER_SUCCESS':
-      return state; 
-      case 'REGISTER_FAILURE':
-        return {
-          ...state,
-          user: null,
-          loggedIn: false,
-          error: action.error || 'REGISTER_FAILURE',
-        };
-      case 'FORGET_PW_SUCCESS':
-        return {
-          ...state,
-          user: null,
-          loggedIn: false,
-          message: action.message || 'FORGET_PW_SUCCESS',
-        };  
-      case 'FORGET_PW_FAIL':
-        return {
-          ...state,
-          user: null,
-          loggedIn: false,
-          error: action.error || 'FORGET_PW_FAIL',
-        };  
-      case 'PASSWORD_RESET_SUCCESS':
-        return {
-          ...state,
-          user: null,
-          loggedIn: false,
-          message: action.message || 'PASSWORD_RESET_SUCCESS',
-        };  
-      case 'PASSWORD_RESET_FAILURE':
-        return {
-          ...state,
-          user: null,
-          loggedIn: false,
-          error: action.error || 'PASSWORD_RESET_FAILURE',
-        };    
-      case 'LOGOUT':
+
+const authReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'LOGIN_SUCCESS':
+      
+      localStorage.setItem('token', action.payload.jwtToken); 
+      return {
+        ...state,
+        user: action.payload.user,
+        loggedIn: !isTokenExpired(action.payload.jwtToken), 
+        error: null,
+      };
+    case 'LOGIN_FAILURE':
+
+      return {
+        ...state,
+        user: null,
+        loggedIn: false,
+        error: action.error || 'Login failed',
+      };
+    case 'REGISTER_SUCCESS':
+    return state; 
+    case 'REGISTER_FAILURE':
+      return {
+        ...state,
+        user: null,
+        loggedIn: false,
+        error: action.error || 'REGISTER_FAILURE',
+      };
+    case 'FORGET_PW_SUCCESS':
+      return {
+        ...state,
+        user: null,
+        loggedIn: false,
+        message: action.message || 'FORGET_PW_SUCCESS',
+      };  
+    case 'FORGET_PW_FAIL':
+      return {
+        ...state,
+        user: null,
+        loggedIn: false,
+        error: action.error || 'FORGET_PW_FAIL',
+      };  
+    case 'PASSWORD_RESET_SUCCESS':
+      return {
+        ...state,
+        user: null,
+        loggedIn: false,
+        message: action.message || 'PASSWORD_RESET_SUCCESS',
+      };  
+    case 'PASSWORD_RESET_FAILURE':
+      return {
+        ...state,
+        user: null,
+        loggedIn: false,
+        error: action.error || 'PASSWORD_RESET_FAILURE',
+      };    
+    case 'LOGOUT':
+      
+      return {
+        ...state,
+        user: null,
+        loggedIn: false,
+        error: null,
+      };
+    
+    case 'SELECT_QR_CODE_DATA':
+      return {
+        ...state,
+        qrCodeData: action.qrCodeUrl,
+        email: action.email,
         
-        return {
-          ...state,
-          user: null,
-          loggedIn: false,
-          error: null,
-        };
-      // Other cases as needed (e.g., additional actions related to user authentication)
-      default:
-        return state;
-    }
-  };
+      };
+    // Other cases as needed (e.g., additional actions related to user authentication)  
+    default:
+      return state;
+  }
+};
   
   
 

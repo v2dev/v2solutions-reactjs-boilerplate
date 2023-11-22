@@ -13,7 +13,7 @@ import ForgetPassword from "./components/Pages/ForgetPassword";
 import ResetPassword from "./components/Pages/ResetPassword";
 import axios from 'axios';
 import HomePage from "./components/Pages/HomePage";
-
+import MFAPage from "./components/Pages/MFAPage";
 function App() {
 
   axios.interceptors.request.use(
@@ -68,6 +68,10 @@ function App() {
         {
           path: "forget-password",
           element: <ForgetPassword />,
+        },
+        {
+          path: "mfa",
+          element: <MFAPage />,
         },
         {
           path: "reset-password/:token",

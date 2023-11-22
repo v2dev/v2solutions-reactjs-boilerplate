@@ -52,7 +52,17 @@ function AuthenticationPage() {
           navigate('/');
         }
       } else {
-        dispatch(register(email, password, name));
+        const signupResult = await  dispatch(register(email, password, name));
+
+        if (signupResult.qrCodeUrl) {
+          console.log(signupResult.qrCodeUrl);
+
+          dispatch({ type: 'SELECT_QR_CODE_DATA', qrCodeUrl: signupResult.qrCodeUrl,email:email });
+        
+          navigate('/mfa');
+        }
+
+
       }
     }
   };
