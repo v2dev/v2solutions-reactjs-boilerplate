@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 function MFAPage() {
   const dispatch = useDispatch();
-  const qrCodeData = useSelector((state) => state.auth.qrCodeData) || {};
+  const qrCodeData = useSelector((state) => state.auth.qrCodeData);
   const email = useSelector((state) => state.auth.email) || {};
   const navigate = useNavigate();
   const [mfaCode, setMfaCode] = useState('');
@@ -19,11 +19,9 @@ function MFAPage() {
     const mfaVerificationResult = await dispatch(verifyMFA(mfaCode,email));
 
     if (mfaVerificationResult && mfaVerificationResult.success) {
-      // Handle success, e.g., redirect to dashboard
       console.log('MFA verification successful');
       navigate('/');
     } else {
-      // Handle error
       setError('MFA verification failed. Please try again.');
     }
   };
@@ -35,13 +33,10 @@ function MFAPage() {
           <div className="card">
             <div className="card-body text-center">
               <h2 className="text-center mb-4">MFA Verification</h2>
-
-              {/* Display the QR code or relevant information if needed */}
               {qrCodeData  && (
                 <img src={qrCodeData} alt="QR Code" />
               )}
 
-              {/* MFA Verification Form */}
               <form onSubmit={handleMFAVerification}>
                 <label htmlFor="mfaCode">Enter MFA Code:</label>
                 <input

@@ -49,8 +49,10 @@ function AuthenticationPage() {
       if (loginMode) {
         const loginResult = await dispatch(login(email, password));
         if (loginResult && loginResult.success) {
-          navigate('/');
+          dispatch({ type: 'SELECT_QR_CODE_DATA',email:email });
+          navigate('/mfa');
         }
+
       } else {
         const signupResult = await  dispatch(register(email, password, name));
 
@@ -73,12 +75,6 @@ function AuthenticationPage() {
     setFormErrors({ ...formErrors, [name]: '' });
   };
 
-  const responseMessage = (response) => {
-    console.log(response);
-  };
-  const errorMessage = (error) => {
-    console.log(error);
-  };
 
   const handleModeChange = (mode) => {
     setLoginMode(mode);

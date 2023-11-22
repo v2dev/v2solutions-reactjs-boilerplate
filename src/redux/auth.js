@@ -1,7 +1,6 @@
 // Define action creators for login and registration
 import { redirect } from "react-router-dom";
 import API_BASE_URL from "../configs/apiBaseUrl"
-import { createSlice } from '@reduxjs/toolkit';
 
 export const login = (email, password) => {
   return async (dispatch) => {
@@ -17,10 +16,9 @@ export const login = (email, password) => {
       
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token);
-        dispatch({ type: 'LOGIN_SUCCESS', payload: data });
-        return { success: true }; // Indicate successful login
-
+        if(data.message){
+          return { success: true }; 
+        } 
       } else {
         const data = await response.json();
         
@@ -159,10 +157,10 @@ export const verifyMFA = (mfaToken,email) => {
         },
         body: JSON.stringify({ mfaToken,email }),
       });
-
+      console.log(response);
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+       
         localStorage.setItem('token', data.jwtToken);
         dispatch({ type: 'LOGIN_SUCCESS', payload: data });
         
@@ -219,12 +217,10 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LOGIN_SUCCESS':
-      
-      localStorage.setItem('token', action.payload.jwtToken); 
       return {
         ...state,
         user: action.payload.user,
-        loggedIn: !isTokenExpired(action.payload.jwtToken), 
+        loggedIn: !isTokenExpired(action.payload.token), 
         error: null,
       };
     case 'LOGIN_FAILURE':
@@ -284,7 +280,7 @@ const authReducer = (state = initialState, action) => {
     case 'SELECT_QR_CODE_DATA':
       return {
         ...state,
-        qrCodeData: action.qrCodeUrl,
+        qrCodeData: action.qrCodeUrl || '',
         email: action.email,
         
       };
