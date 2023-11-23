@@ -11,8 +11,12 @@ const EmployeeList = () => {
   const [successMessage, setSuccessMessage] = useState(location.state && location.state.successMessage);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deletingEmployee, setDeletingEmployee] = useState(null);
-  const [sortBy, setSortBy] = useState('');
-  const [sortDirection, setSortDirection] = useState(1);
+  
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
+
+
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -27,7 +31,7 @@ const EmployeeList = () => {
 
   const fetchAndSetData = async (page = 1, filterValue = '') => {
     try {
-      const response = await fetchData(`?page=${page}&sort=${sortDirection === 1 ? sortBy : `-${sortBy}`}&filter=${filterValue}`);
+      const response = await fetchData(`?page=${page}&sort=${sortOrder}&sortedColumn=${sortColumn}&filter=${filterValue}`);
       if (response && !response.error) {
         setEmployees(response.employees);
         setTotalPages(response.totalPages);
@@ -43,9 +47,11 @@ const EmployeeList = () => {
   };
 
   const handleSortAndFilter = async (field, value = '') => {
-    const newSortDirection = sortBy === field ? -sortDirection : 1;
-    setSortBy(field);
-    setSortDirection(newSortDirection);
+    
+    const newSortOrder = sortColumn === field && sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortColumn(field);
+    setSortOrder(newSortOrder);
+
     await fetchAndSetData(currentPage, value);
   };
 
@@ -112,24 +118,25 @@ const EmployeeList = () => {
 
               <table className="table table-bordered table-striped">
                 <thead>
-                  <tr>
-                    <th className="col-md-2" onClick={() => handleSortAndFilter('name')}>
-                      Name {sortBy === 'name' && (sortDirection === 1 ? '▲' : '▼')}
-                    </th>
-                    <th className="col-md-2" onClick={() => handleSortAndFilter('email')}>Email 
-                     {sortBy === 'email' && (sortDirection === 1 ? '▲' : '▼')}
-                    </th>
-                    <th className="col-md-1" onClick={() => handleSortAndFilter('dob')}>Date of Birth
-                    {sortBy === 'dob' && (sortDirection === 1 ? '▲' : '▼')}
-                    </th>
-                    <th className="col-md-1" onClick={() => handleSortAndFilter('designation')}>Designation
-                    {sortBy === 'designation' && (sortDirection === 1 ? '▲' : '▼')}
-                    </th>
-                    <th className="col-md-2" onClick={() => handleSortAndFilter('education')}>Education
-                    {sortBy === 'education' && (sortDirection === 1 ? '▲' : '▼')}
-                    </th>
-                    <th className="col-md-2">Actions</th>
-                  </tr>
+                <tr>
+                  <th className="col-md-2" onClick={() => handleSortAndFilter('name')}>
+                    Name {sortColumn === 'name' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th className="col-md-2" onClick={() => handleSortAndFilter('email')}>
+                    Email {sortColumn === 'email' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th className="col-md-1" onClick={() => handleSortAndFilter('dob')}>
+                    Date of Birth {sortColumn === 'dob' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th className="col-md-1" onClick={() => handleSortAndFilter('designation')}>
+                    Designation {sortColumn === 'designation' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th className="col-md-2" onClick={() => handleSortAndFilter('education')}>
+                    Education {sortColumn === 'education' && (sortOrder === 'asc' ? '▲' : '▼')}
+                  </th>
+                  <th className="col-md-2">Actions</th>
+                </tr>
+
                 </thead>
                 <tbody>{renderTableRows()}</tbody>
               </table>
