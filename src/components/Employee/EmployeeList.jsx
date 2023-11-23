@@ -74,7 +74,7 @@ const EmployeeList = () => {
       <tr key={employee.emp_id}>
         <td>{employee.name}</td>
         <td>{employee.email}</td>
-        <td>{formatDate(employee.dob)}</td>
+        <td>{employee.dob}</td>
         <td>{employee.designation}</td>
         <td>{employee.education}</td>
         <td>
@@ -89,14 +89,7 @@ const EmployeeList = () => {
     ));
   };
 
-  const formatDate = (dob) => {
-    const date = new Date(dob);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-
-    return `${month}/${day}/${year}`;
-  };
+  
 
   return (
     <div className=" my-1">

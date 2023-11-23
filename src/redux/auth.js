@@ -157,11 +157,13 @@ export const verifyMFA = (mfaToken,email) => {
         },
         body: JSON.stringify({ mfaToken,email }),
       });
-      console.log(response);
+
+
       if (response.ok) {
         const data = await response.json();
        
         localStorage.setItem('token', data.jwtToken);
+
         dispatch({ type: 'LOGIN_SUCCESS', payload: data });
         
         return { success: true };
@@ -195,13 +197,14 @@ const decodeToken = (token) => {
 };
 
 const isTokenExpired = (token) => {
-  const decodedToken = decodeToken(token);
-
-  if (decodedToken && decodedToken.exp) {
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    return decodedToken.exp < currentTime; // Check if expiration time is in the past
+  if(token){
+    const decodedToken = decodeToken(token);
+    if (decodedToken && decodedToken.exp) {
+      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+      return decodedToken.exp < currentTime; // Check if expiration time is in the past
+    }
+    return true; // Treat the token as expired if it's invalid or doesn't contain expiration time
   }
-  return true; // Treat the token as expired if it's invalid or doesn't contain expiration time
 };
 
 
@@ -217,7 +220,8 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LOGIN_SUCCESS':
-      return {
+      
+      return {  
         ...state,
         user: action.payload.user,
         loggedIn: !isTokenExpired(action.payload.token), 

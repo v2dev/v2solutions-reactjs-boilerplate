@@ -15,7 +15,7 @@ const useCrudApi = (apiEndpoint) => {
 
     try {
 
-      const response = await axios.get(API_BASE_URL + apiEndpoint + param)
+      const response = await axios.get(API_BASE_URL + apiEndpoint+'/get' + param)
       return response.data
     } catch (error) {
       setError(error)
@@ -26,7 +26,7 @@ const useCrudApi = (apiEndpoint) => {
 
   const postData = async (newData) => {
     try {
-      const response = await axios.post(API_BASE_URL + apiEndpoint, newData)
+      const response = await axios.post(API_BASE_URL + apiEndpoint+'/add' , newData)
       return response
     } catch (error) {
       return error

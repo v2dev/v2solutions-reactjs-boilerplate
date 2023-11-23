@@ -1,6 +1,6 @@
 const API_ENDPOINTS = {
   TODOS: "/todos",
-  EMPLOYEES: "/employees",
+  EMPLOYEES: "/employee",
   
 }
 

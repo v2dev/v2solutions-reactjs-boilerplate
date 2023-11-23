@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function MFAPage() {
   const dispatch = useDispatch();
   const qrCodeData = useSelector((state) => state.auth.qrCodeData);
-  const email = useSelector((state) => state.auth.email) || {};
+  const email = 'sk.chauhan.work@gmail.com'//useSelector((state) => state.auth.email) || {};
   const navigate = useNavigate();
   const [mfaCode, setMfaCode] = useState('');
   const [error, setError] = useState('');
