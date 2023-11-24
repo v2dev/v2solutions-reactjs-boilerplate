@@ -20,7 +20,6 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
     dob: '',
     designation: '',
     education: '',
-    address: '',
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -37,7 +36,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
     try {
       const response = await getData(`/${id}`);
       if (response && !response.error) {
-        const formattedEmployeeData = { ...response, dob: new Date(response.dob).toISOString().split('T')[0] };
+        const formattedEmployeeData = { ...response };
         setEmployeeData(formattedEmployeeData);
         setIsEdit(true);
       } else {
@@ -57,7 +56,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
 
   const validateForm = () => {
     const errors = {};
-    ['name', 'email', 'dob', 'designation', 'education', 'address'].forEach((field) => {
+    ['name', 'email', 'dob', 'designation', 'education'].forEach((field) => {
       if (!employeeData[field]) {
         errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
       }
@@ -78,7 +77,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
           action(response.data);
           setSuccessMessage(`Employee ${isEdit ? 'updated' : 'added'} successfully.`);
           navigate('/employee', { state: { successMessage: `Employee ${isEdit ? 'updated' : 'added'} successfully.` } });
-          setEmployeeData({ emp_id: '', name: '', email: '', dob: '', designation: '', education: '', address: '' });
+          setEmployeeData({ emp_id: '', name: '', email: '', dob: '', designation: '', education: '' });
         }
       } catch (error) {
         console.error(`Error ${isEdit ? 'updating' : 'adding'} employee:`, error);
@@ -98,7 +97,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
                 {successMessage && <div className="alert alert-success">{successMessage}</div>}
                 {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
-                {['name', 'email', 'dob', 'designation', 'education', 'address'].map((field) => (
+                {['name', 'email', 'dob', 'designation', 'education'].map((field) => (
                   <div key={field} className="mb-3">
                     <label htmlFor={field} className="form-label">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
                     <input

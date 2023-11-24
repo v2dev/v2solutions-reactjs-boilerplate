@@ -45,7 +45,13 @@ export const register = (email, password, name) => {
         if (response.ok) {
           dispatch({ type: 'REGISTER_SUCCESS' });
           const data = await response.json();
-          return { qrCodeUrl: data.qrCodeUrl }; 
+          if(data.qrCodeUrl){
+            return { qrCodeUrl: data.qrCodeUrl }; 
+          }else{
+            
+            dispatch({ type: 'REGISTER_FAILURE' ,error: data.error});
+            return { error: true }; 
+          }
         } else {
           const data = await response.json();
           
@@ -69,7 +75,7 @@ export const forgetPassword = (email) => {
   return async (dispatch) => {
     try {
       // Make the API call for login
-      const response = await fetch(API_BASE_URL + "/forget-password", {
+      const response = await fetch(API_BASE_URL + "/user/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

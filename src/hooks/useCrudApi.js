@@ -39,8 +39,9 @@ const useCrudApi = (apiEndpoint) => {
 
     try {
 
-      const response = await axios.get(API_BASE_URL + apiEndpoint + param)
-      return response.data
+      const response = await axios.get(API_BASE_URL + apiEndpoint+'/get' + param)
+      
+      return response.data.employee
     } catch (error) {
       setError(error)
     }
@@ -51,7 +52,7 @@ const useCrudApi = (apiEndpoint) => {
   const updateData = async (itemId, updatedData) => {
     try {
       const response = await axios.put(
-        `${API_BASE_URL}${apiEndpoint}/${itemId}`,
+        `${API_BASE_URL}${apiEndpoint}`+/update/+`${itemId}`,
         updatedData,
       )
       return response
@@ -63,7 +64,7 @@ const useCrudApi = (apiEndpoint) => {
 
   const deleteData = async (itemId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}${apiEndpoint}/${itemId}`)
+      const response = await axios.delete(`${API_BASE_URL}${apiEndpoint}`+/delete/+`${itemId}`)
       return response
     } catch (error) {
       return error
