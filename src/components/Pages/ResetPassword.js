@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { resetPasswordAction } from "../../redux/auth";
-import { useParams } from 'react-router-dom';
 
 function ResetPassword() {
     // { token }
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  let { token } = useParams();
+  const [otp, setOtp] = useState('');
+  
+  
   const error = useSelector(state => state.auth.error);
   const message = useSelector(state => state.auth.message);
   const [formErrors, setFormErrors] = useState({});
@@ -18,7 +19,7 @@ function ResetPassword() {
     // Dispatch an action to reset the password
     // Pass 'password' and 'confirmPassword' to the action
     if (validateForm()) {
-      dispatch(resetPasswordAction(token,password, confirmPassword));
+      dispatch(resetPasswordAction(otp,password, confirmPassword));
     }
   };
 
@@ -27,7 +28,10 @@ function ResetPassword() {
     
     // Validate each field
     
-
+    
+    if (!otp) {
+      errors.otp = "OTP  is required";
+    }
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     if (!password) {
       errors.password = "Password is required";
@@ -51,6 +55,8 @@ function ResetPassword() {
       setPassword(value);
     } else if (name === 'confirmPassword') {
       setConfirmPassword(value);
+    }else if (name === 'otp') {
+      setOtp(value);
     }
   };
 
@@ -65,6 +71,13 @@ function ResetPassword() {
               <form onSubmit={handleResetPassword}>
                 {error && <p className="text-danger text-center">{error}</p>}
                 {message && <p className="text-success text-center">{message}</p>}
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">OTP</label>
+                  <input type="number"  className={`form-control ${formErrors.otp && "is-invalid"}`} id="otp" name="otp" value={otp} onChange={handleInputChange} />
+                  <div className={`invalid-feedback ${formErrors.otp ? "d-block" : ""}`}>
+                      {formErrors.otp}
+                    </div>
+                </div>
                 <div className="mb-3">
                   <label htmlFor="password" className="form-label">New Password</label>
                   <input type="password"  className={`form-control ${formErrors.password && "is-invalid"}`} id="password" name="password" value={password} onChange={handleInputChange} />

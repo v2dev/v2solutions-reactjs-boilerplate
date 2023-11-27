@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import { forgetPassword } from "../../redux/auth";
+import { useNavigate } from 'react-router-dom';
 
 function ForgetPasswordComponent() {
   const dispatch = useDispatch();
@@ -9,12 +10,14 @@ function ForgetPasswordComponent() {
   const error = useSelector(state => state.auth.error);
   const message = useSelector(state => state.auth.message);
   const [formErrors, setFormErrors] = useState({});
-  
+  const navigate = useNavigate(); 
   const handleForgetPassword = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       dispatch(forgetPassword(email));
+      
       setEmail('')
+      navigate('/reset-password');
     }
     
 

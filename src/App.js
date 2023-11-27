@@ -74,7 +74,7 @@ function App() {
           element: <MFAPage />,
         },
         {
-          path: "reset-password/:token",
+          path: "reset-password",
           element: <ResetPassword />,
 
         },
