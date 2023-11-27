@@ -7,6 +7,7 @@ function ResetPassword() {
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  
   const [otp, setOtp] = useState('');
   
   
