@@ -24,7 +24,7 @@ function ResetPassword() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      dispatch(resetPasswordAction(otp || token, password, confirmPassword));
+      dispatch(resetPasswordAction(otp, password, confirmPassword,token));
     }
   };
 

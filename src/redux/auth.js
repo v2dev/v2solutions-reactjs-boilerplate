@@ -98,15 +98,28 @@ export const forgetPassword = (email) => {
   };
 };
 
-export const resetPasswordAction = (otp,password, confirmPassword) => {
+export const resetPasswordAction = (otp,password, confirmPassword,token) => {
+
   return async (dispatch) => {
     try {
+      let requestBody = { password, confirmPassword };
+
+      // Conditionally add otp to the body if it is provided
+      if (otp) {
+        requestBody.otp = otp;
+      }
+
+      // Conditionally add token to the body if it is provided
+      if (token) {
+        requestBody.token = token;
+      }
+
       const response = await fetch(`${API_BASE_URL}/user/reset-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ otp,password, confirmPassword }),
+        body: JSON.stringify(requestBody),
       });
 
       if (response.ok) {

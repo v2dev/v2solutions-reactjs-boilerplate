@@ -1,6 +1,6 @@
 import React from "react"
 import Header from "../UI/Header/Header"
-import AddEmployee from "../Employee/AddEmployee"
+import EmployeeForm from "../Employee/EmployeeForm"
 import Breadcrumb from "../UI/Breadcrumb/Breadcrumb";
 
 function EmployeeFormPage() {
@@ -14,7 +14,7 @@ function EmployeeFormPage() {
             <Breadcrumb />
             </div>
         </nav>
-          <AddEmployee />
+          <EmployeeForm />
         </div>
     </div> 
     </> 
