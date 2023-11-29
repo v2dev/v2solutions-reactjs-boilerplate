@@ -1,7 +1,7 @@
 // MFAPage.js
 import React, { useState } from 'react';
 import { useDispatch ,useSelector } from 'react-redux';
-import { verifyMFA } from '../../redux/auth';
+import { verifyMFA } from '../../redux/authActions';
 import { useNavigate } from 'react-router-dom';
 
 function MFAPage() {

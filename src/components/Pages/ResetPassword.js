@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { resetPasswordAction } from "../../redux/auth";
+import { resetPasswordAction } from "../../redux/authActions";
 import { useParams } from "react-router-dom";
 
 function ResetPassword() {

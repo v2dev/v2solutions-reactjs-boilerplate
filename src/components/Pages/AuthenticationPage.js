@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, register } from '../../redux/auth';
+import { login, register } from '../../redux/authActions';
 import { useNavigate, Link } from 'react-router-dom';
 
 function AuthenticationPage() {

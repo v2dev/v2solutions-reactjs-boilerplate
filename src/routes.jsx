@@ -8,7 +8,7 @@ import AuthenticationPage from './components/Pages/AuthenticationPage';
 import ForgetPassword from './components/Pages/ForgetPassword';
 import ResetPassword from './components/Pages/ResetPassword';
 import MFAPage from './components/Pages/MFAPage';
-import {checkAuthLoader} from './redux/auth'
+import {checkAuthLoader} from './redux/authActions'
 
 // Pass dispatch to checkAuthLoader
 export const routes = (dispatch) => [

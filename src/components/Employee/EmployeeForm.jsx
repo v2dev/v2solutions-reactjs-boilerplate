@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import API_ENDPOINTS from '../../configs/apiConfig';
 import useCrudApi from '../../hooks/useCrudApi';
 import { connect } from 'react-redux';
-import { addEmployee as addEmployeeAction, updateEmployee as updateEmployeeAction } from '../../redux/employee';
+import { addEmployee as addEmployeeAction, updateEmployee as updateEmployeeAction } from '../../redux/employeeActions';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
@@ -12,7 +12,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
   const { id } = useParams();
-
+  
   const [employeeData, setEmployeeData] = useState({
     emp_id: '',
     name: '',
@@ -51,7 +51,8 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEmployeeData({ ...employeeData, [name]: value });
-    setFormErrors({ ...formErrors, [name]: name === 'dob' && !value.match(/^\d{4}-\d{2}-\d{2}$/) ? 'Invalid date format. Use YYYY-MM-DD' : '' });
+    setFormErrors({ ...formErrors, [name]: name === 'dob' && !value.match(/^\d{2}-\d{2}-\d{4}$/) ? 'Invalid date format. Use DD-MM-YYYY' : '' });
+
   };
 
   const validateForm = () => {

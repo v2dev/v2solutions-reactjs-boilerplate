@@ -111,7 +111,7 @@ const EmployeeList = () => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Filter by Name or Designation"
+                  placeholder="Filter by Name "
                   onChange={(e) => handleSortAndFilter('name', e.target.value)}
                 />
               </div>
