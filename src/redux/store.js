@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import todosReducer from "./todos"
+import employeeReducer from "./employee"
+
 import thunk from "redux-thunk"
 import authReducer from "./auth"
 const store = configureStore({
   reducer: {
-    todos: todosReducer,
+    employee: employeeReducer,
     auth:authReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
