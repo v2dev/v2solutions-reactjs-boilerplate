@@ -4,6 +4,7 @@ import useCrudApi from '../../hooks/useCrudApi';
 import { connect } from 'react-redux';
 import { addEmployee as addEmployeeAction, updateEmployee as updateEmployeeAction } from '../../redux/employeeActions';
 import { useNavigate, useParams } from 'react-router-dom';
+import moment from 'moment';
 
 // eslint-disable-next-line react/prop-types
 const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
@@ -50,11 +51,19 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+  
+    // Validate dob with moment.js for both formats (YYYY-MM-DD and DD-MM-YYYY)
+    const isValidDob =
+      moment(value, ['YYYY-MM-DD'], true).isValid();
+  
     setEmployeeData({ ...employeeData, [name]: value });
-    setFormErrors({ ...formErrors, [name]: name === 'dob' && !value.match(/^\d{2}-\d{2}-\d{4}$/) ? 'Invalid date format. Use DD-MM-YYYY' : '' });
-
+    setFormErrors({
+      ...formErrors,
+      [name]: name === 'dob' && !isValidDob ? 'Invalid date format. Use YYYY-MM-DD ' : '',
+    });
   };
-
+  
+  
   const validateForm = () => {
     const errors = {};
     ['name', 'email', 'dob', 'designation', 'education'].forEach((field) => {
