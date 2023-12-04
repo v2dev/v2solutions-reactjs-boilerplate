@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { resetPasswordAction } from "../../redux/authActions";
 import { useParams } from "react-router-dom";
+import Header from "../UI/Header/Header"
 
 function ResetPassword() {
   const dispatch = useDispatch();
@@ -66,70 +67,75 @@ function ResetPassword() {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-4">
-          <div className="card">
-            <div className="card-body">
-              <h2 className="text-center mb-4">Reset Password</h2>
+    <div className="wrapper">
+      <Header />
+      <div id="content">
+        <div className="container mt-5">
+          <div className="row justify-content-center">
+            <div className="col-md-4">
+              <div className="card">
+                <div className="card-body">
+                  <h2 className="text-center mb-4">Reset Password</h2>
 
-              <form onSubmit={handleResetPassword}>
-                {error && <p className="text-danger text-center">{error}</p>}
-                {message && <p className="text-success text-center">{message}</p>}
+                  <form onSubmit={handleResetPassword}>
+                    {error && <p className="text-danger text-center">{error}</p>}
+                    {message && <p className="text-success text-center">{message}</p>}
 
-                {!token && (
-                  <div className="mb-3">
-                    <label htmlFor="otp" className="form-label">OTP</label>
-                    <input
-                      type="number"
-                      className={`form-control ${formErrors.otp && "is-invalid"}`}
-                      id="otp"
-                      name="otp"
-                      value={otp}
-                      onChange={handleInputChange}
-                    />
-                    <div className={`invalid-feedback ${formErrors.otp ? "d-block" : ""}`}>
-                      {formErrors.otp}
+                    {!token && (
+                      <div className="mb-3">
+                        <label htmlFor="otp" className="form-label">OTP</label>
+                        <input
+                          type="number"
+                          className={`form-control ${formErrors.otp && "is-invalid"}`}
+                          id="otp"
+                          name="otp"
+                          value={otp}
+                          onChange={handleInputChange}
+                        />
+                        <div className={`invalid-feedback ${formErrors.otp ? "d-block" : ""}`}>
+                          {formErrors.otp}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mb-3">
+                      <label htmlFor="password" className="form-label">New Password</label>
+                      <input
+                        type="password"
+                        className={`form-control ${formErrors.password && "is-invalid"}`}
+                        id="password"
+                        name="password"
+                        value={password}
+                        onChange={handleInputChange}
+                      />
+                      <div className={`invalid-feedback ${formErrors.password ? "d-block" : ""}`}>
+                        {formErrors.password}
+                      </div>
                     </div>
-                  </div>
-                )}
 
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">New Password</label>
-                  <input
-                    type="password"
-                    className={`form-control ${formErrors.password && "is-invalid"}`}
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={handleInputChange}
-                  />
-                  <div className={`invalid-feedback ${formErrors.password ? "d-block" : ""}`}>
-                    {formErrors.password}
-                  </div>
+                    <div className="mb-3">
+                      <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+                      <input
+                        type="password"
+                        className={`form-control ${formErrors.confirmPassword && "is-invalid"}`}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        onChange={handleInputChange}
+                      />
+                      <div className={`invalid-feedback ${formErrors.confirmPassword ? "d-block" : ""}`}>
+                        {formErrors.confirmPassword}
+                      </div>
+                    </div>
+
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                  </form>
                 </div>
-
-                <div className="mb-3">
-                  <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
-                  <input
-                    type="password"
-                    className={`form-control ${formErrors.confirmPassword && "is-invalid"}`}
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    onChange={handleInputChange}
-                  />
-                  <div className={`invalid-feedback ${formErrors.confirmPassword ? "d-block" : ""}`}>
-                    {formErrors.confirmPassword}
-                  </div>
-                </div>
-
-                <button type="submit" className="btn btn-primary">Submit</button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+    </div>
     </div>
   );
 }

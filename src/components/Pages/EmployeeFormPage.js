@@ -1,7 +1,7 @@
 import React from "react"
 import Header from "../UI/Header/Header"
 import EmployeeForm from "../Employee/EmployeeForm"
-import Breadcrumb from "../UI/Breadcrumb/Breadcrumb";
+import Footer from "../UI/Footer/Footer"
 
 function EmployeeFormPage() {
   return (
@@ -9,14 +9,10 @@ function EmployeeFormPage() {
     <div className="wrapper">
       <Header />
       <div id="content">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container-fluid">
-            <Breadcrumb />
-            </div>
-        </nav>
-          <EmployeeForm />
-        </div>
-    </div> 
+            <EmployeeForm />
+      </div>
+    </div>
+    <Footer /> 
     </> 
   );
 }

@@ -4,8 +4,8 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p className="footer-text">&copy; {new Date().getFullYear()} Your Company</p>
-        <p className="footer-text">Contact: contact@yourcompany.com</p>
+        <p className="footer-text">&copy; {new Date().getFullYear()}  V2Solutions. All Rights Reserved.</p>
+        
       </div>
     </footer>
   )

@@ -16,7 +16,7 @@ export const routes = (dispatch) => [
     path: '/',
     element: <RootLayout />,
     children: [
-      { path: '/', element: <HomePage />, loader: checkAuthLoader(dispatch) },
+      { path: '/', element: <HomePage />},
       { path: 'employee', element: <EmployeeListPage />, loader: checkAuthLoader(dispatch) },
       { path: 'employee/add', element: <EmployeeFormPage />, loader: checkAuthLoader(dispatch) },
       { path: 'employee/edit/:id', element: <EmployeeFormPage />, loader: checkAuthLoader(dispatch) },

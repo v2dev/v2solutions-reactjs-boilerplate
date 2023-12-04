@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useDispatch ,useSelector } from 'react-redux';
 import { verifyMFA } from '../../redux/authActions';
 import { useNavigate } from 'react-router-dom';
+import Header from "../UI/Header/Header"
+import Footer from "../UI/Footer/Footer"
 
 function MFAPage() {
   const dispatch = useDispatch();
@@ -27,34 +29,43 @@ function MFAPage() {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body text-center">
-              <h2 className="text-center mb-4">MFA Verification</h2>
-              {qrCodeData  && (
-                <img src={qrCodeData} alt="QR Code" />
-              )}
+    <>
+    <div className="wrapper">
+      <Header />
+      <div id="content">
+        <div className="container mt-5">
+          <div className="row justify-content-center">
+            <div className="col-md-4">
+              <div className="card">
+                <div className="card-body text-center">
+                  <h2 className="text-center mb-4">MFA Verification</h2>
+                  {qrCodeData  && (
+                    <img src={qrCodeData} alt="QR Code" />
+                  )}
 
-              <form onSubmit={handleMFAVerification}>
-                <label htmlFor="mfaCode">Enter MFA Code:</label>
-                <input
-                  type="text"
-                  id="mfaCode"
-                  value={mfaCode}
-                  onChange={(e) => setMfaCode(e.target.value)}
-                />
-                {error && <p className="text-danger">{error}</p>}
-                <button type="submit" className="btn btn-primary">
-                  Verify MFA
-                </button>
-              </form>
+                  <form onSubmit={handleMFAVerification}>
+                    <label htmlFor="mfaCode">Enter MFA Code:</label>
+                    <input
+                      type="text"
+                      id="mfaCode"
+                      value={mfaCode}
+                      onChange={(e) => setMfaCode(e.target.value)}
+                    />
+                    {error && <p className="text-danger">{error}</p>}
+                    <button type="submit" className="btn btn-primary">
+                      Verify MFA
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      
     </div>
+    <Footer />
+    </>
   );
 }
 

@@ -26,4 +26,7 @@ module.exports = {
       version: "detect", // Use the automatic detection of React version
     },
   },
-}
+  globals: {
+    process: true, // Add the process global variable
+  },
+};

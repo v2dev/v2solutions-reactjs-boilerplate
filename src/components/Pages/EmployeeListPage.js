@@ -3,6 +3,8 @@ import Header from "../UI/Header/Header";
 import EmployeeList from "../Employee/EmployeeList";
 import Breadcrumb from "../UI/Breadcrumb/Breadcrumb";
 import { Link } from "react-router-dom";
+import Footer from "../UI/Footer/Footer"
+
 
 function EmployeeListPage() {
   return (
@@ -24,6 +26,7 @@ function EmployeeListPage() {
           <EmployeeList />
         </div>
       </div>
+      <Footer />
     </>
   );
 }

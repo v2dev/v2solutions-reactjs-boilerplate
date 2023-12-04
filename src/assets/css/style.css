@@ -30,12 +30,11 @@ nav.navbar.navbar-expand-lg.navbar-dark {
 /* Footer.css */
 
 .footer {
-  background-color: #333;
+  background-color: #000;
   color: #fff;
-  padding: 20px 0;
+  padding: 10px;
   text-align: center;
 }
-
 .footer-content {
   max-width: 600px;
   margin: 0 auto;
@@ -45,6 +44,7 @@ nav.navbar.navbar-expand-lg.navbar-dark {
   margin: 0;
   padding: 5px 0;
   font-size: 14px;
+  color: #fff;
 }
 
 .footer-text a {
@@ -103,7 +103,7 @@ label {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 button {
@@ -347,4 +347,14 @@ a.article:hover {
   color: #721c24;
   background-color: #f8d7da;
   border-color: #f5c6cb;
+}
+.not-logged-in-message {
+  margin-top: 20px;
+  color: red;
+}
+h1{
+  font-size: 2.5rem;
+}
+h2{
+  font-size: 1.8rem;
 }
