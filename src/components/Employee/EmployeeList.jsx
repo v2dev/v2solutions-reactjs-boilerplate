@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import API_ENDPOINTS from '../../configs/apiConfig';
 import useCrudApi from '../../hooks/useCrudApi';
+import moment from 'moment';
 
 const EmployeeList = () => {
   const apiEndpoint = API_ENDPOINTS.EMPLOYEES;
@@ -14,6 +15,7 @@ const EmployeeList = () => {
   
   const [sortColumn, setSortColumn] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Set the default value as per your requirement
 
 
 
@@ -31,7 +33,7 @@ const EmployeeList = () => {
 
   const fetchAndSetData = async (page = 1, filterValue = '') => {
     try {
-      const response = await fetchData(`?page=${page}&sort=${sortOrder}&sortedColumn=${sortColumn}&filter=${filterValue}`);
+      const response = await fetchData(`?page=${page}&limit=${rowsPerPage}&sort=${sortOrder}&sortedColumn=${sortColumn}&filter=${filterValue}`);
       if (response && !response.error) {
         setEmployees(response.employees);
         setTotalPages(response.totalPages);
@@ -45,6 +47,12 @@ const EmployeeList = () => {
       console.log('Error fetching data:', error);
     }
   };
+  const handleRowsPerPageChange = (e) => {
+    const newRowsPerPage = parseInt(e.target.value, 10);
+    setRowsPerPage(newRowsPerPage);
+    fetchAndSetData(1); // Fetch data for the first page when rowsPerPage changes
+  };
+
 
   const handleSortAndFilter = async (field, value = '') => {
     
@@ -80,7 +88,8 @@ const EmployeeList = () => {
       <tr key={employee.emp_id}>
         <td>{employee.name}</td>
         <td>{employee.email}</td>
-        <td>{employee.dob}</td>
+        <td>{moment(employee.dob).format('DD-MM-YYYY')}</td> {/* Format dob here */}
+
         <td>{employee.designation}</td>
         <td>{employee.education}</td>
         <td>
@@ -139,20 +148,41 @@ const EmployeeList = () => {
 
                 </thead>
                 <tbody>{renderTableRows()}</tbody>
+
               </table>
 
-              {/* Pagination */}
-              <nav aria-label="Page navigation">
-                <ul className="pagination justify-content-center">
-                  {[...Array(totalPages).keys()].map((page) => (
-                    <li key={page + 1} className={`page-item ${currentPage === page + 1 ? 'active' : ''}`}>
-                      <button className="page-link" onClick={() => fetchAndSetData(page + 1)}>
-                        {page + 1}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+              <div className="d-flex justify-content-between mb-3">
+                <nav aria-label="Page navigation">
+                  <ul className="pagination ">
+                    {[...Array(totalPages).keys()].map((page) => (
+                      <li key={page + 1} className={`page-item ${currentPage === page + 1 ? 'active' : ''}`}>
+                        <button className="page-link" onClick={() => fetchAndSetData(page + 1)}>
+                          {page + 1}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+                
+                <div className="mb-3">
+                  <label htmlFor="rowsPerPage" className="form-label mr-2">
+                    Row Per Page:
+                  </label>
+                  <select
+                    id="rowsPerPage"
+                    className="form-control"
+                    value={rowsPerPage}
+                    onChange={handleRowsPerPageChange}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                  </select>
+                </div>
+
+              </div>
+
+
 
               {confirmDelete && (
                 <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
