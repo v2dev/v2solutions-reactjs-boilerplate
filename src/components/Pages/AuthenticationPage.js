@@ -9,12 +9,12 @@ function AuthenticationPage() {
   const dispatch = useDispatch();
   const { loggedIn, error } = useSelector((state) => state.auth) || {};
   const [loginMode, setLoginMode] = useState(true);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '',country :''});
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
 
   const clearForm = () => {
-    setFormData({ name: '', email: '', password: '' });
+    setFormData({ name: '', email: '', password: '',country:'' });
     setFormErrors({});
   };
 
@@ -48,7 +48,7 @@ function AuthenticationPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const { email, password, name } = formData;
+      const { email, password, name ,country} = formData;
       if (loginMode) {
         const loginResult = await dispatch(login(email, password));
         if (loginResult && loginResult.success) {
@@ -57,7 +57,7 @@ function AuthenticationPage() {
         }
 
       } else {
-        const signupResult = await  dispatch(register(email, password, name));
+        const signupResult = await  dispatch(register(email, password, name,country));
 
         if (!signupResult.error && signupResult.qrCodeUrl) {
           console.log(signupResult.qrCodeUrl);

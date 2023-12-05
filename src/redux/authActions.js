@@ -29,16 +29,16 @@ export const login = (email, password) => {
   };
 };
   
-export const register = (email, password, name) => {
+export const register = (email, password, name,country) => {
   return async (dispatch) => {
       try {
-        
+        console.log(country);
         const response = await fetch(API_BASE_URL + "/user/signup", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email, password, name }),
+            body: JSON.stringify({ email, password, name,country }),
         });
         
         if (response.ok) {
@@ -47,17 +47,19 @@ export const register = (email, password, name) => {
           if(data.qrCodeUrl){
             return { qrCodeUrl: data.qrCodeUrl }; 
           }else{
-            
             dispatch({ type: 'REGISTER_FAILURE' ,error: data.error});
             return { error: true }; 
           }
         } else {
+          
           const data = await response.json();
           
           dispatch({ type: 'REGISTER_FAILURE' ,error: data.error});
+          return { error: true }; 
       }
       } catch (error) {
         dispatch({ type: 'REGISTER_FAILURE' });
+        return { error: true }; 
       }
   };
 };
@@ -84,15 +86,19 @@ export const forgetPassword = (email) => {
       
       if (response.ok) {
         const data = await response.json();
-        dispatch({ type: 'FORGET_PW_SUCCESS',  message: data.message });
+        dispatch({ type: 'FORGET_PW_SUCCESS',  message: data.message ,error:''});
         return { success: true }; 
       } else {
         const data = await response.json();
         
         dispatch({ type: 'FORGET_PW_FAIL' ,error: data.error});
+        return { error: true }; 
       }
     } catch (error) {
+
       dispatch({ type: 'FORGET_PW_FAIL' });
+      return { error: true }; 
+
     }
   };
 };

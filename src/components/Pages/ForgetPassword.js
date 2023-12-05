@@ -16,10 +16,12 @@ function ForgetPasswordComponent() {
   const handleForgetPassword = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      dispatch(forgetPassword(email));
-      
+      const fp = await   dispatch(forgetPassword(email));
       setEmail('')
-      navigate('/reset-password');
+      if (!fp.error) { 
+        navigate('/reset-password');
+      }
+
     }
     
 
