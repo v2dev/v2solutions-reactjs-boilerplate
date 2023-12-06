@@ -30,7 +30,11 @@ const EmployeeList = () => {
 
     return () => clearTimeout(timer);
   }, [successMessage]);
-
+  useEffect(() => {
+    // This effect will run after the state has been updated
+    fetchAndSetData(1); // Fetch data for the first page when rowsPerPage changes
+  }, [rowsPerPage]); // Run the effect whenever rowsPerPage changes
+  
   const fetchAndSetData = async (page = 1, filterValue = '') => {
     try {
       const response = await fetchData(`?page=${page}&limit=${rowsPerPage}&sort=${sortOrder}&sortedColumn=${sortColumn}&filter=${filterValue}`);
@@ -48,9 +52,10 @@ const EmployeeList = () => {
     }
   };
   const handleRowsPerPageChange = (e) => {
+
     const newRowsPerPage = parseInt(e.target.value, 10);
     setRowsPerPage(newRowsPerPage);
-    fetchAndSetData(1); // Fetch data for the first page when rowsPerPage changes
+    
   };
 
 
