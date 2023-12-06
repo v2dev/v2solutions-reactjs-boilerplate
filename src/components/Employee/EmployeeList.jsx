@@ -13,7 +13,7 @@ const EmployeeList = () => {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deletingEmployee, setDeletingEmployee] = useState(null);
   
-  const [sortColumn, setSortColumn] = useState('');
+  const [sortColumn, setSortColumn] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
   const [rowsPerPage, setRowsPerPage] = useState(5); // Set the default value as per your requirement
 
@@ -55,7 +55,7 @@ const EmployeeList = () => {
 
     const newRowsPerPage = parseInt(e.target.value, 10);
     setRowsPerPage(newRowsPerPage);
-    
+
   };
 
 

@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-const { defaults } = require("jest-config")
+const { defaults } = require("jest-config");
 
 module.exports = {
   collectCoverage: true,
@@ -8,9 +8,8 @@ module.exports = {
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-}
-const config = {
-  moduleFileExtensions: [...defaults.moduleFileExtensions, "mts", "cts"],
-}
-
-module.exports = config
+  moduleFileExtensions: [...defaults.moduleFileExtensions, "mts", "cts", "css"],
+  moduleNameMapper: {
+    "\\.(css|less)$": "<rootDir>/path/to/empty-module.js",
+  },
+};
