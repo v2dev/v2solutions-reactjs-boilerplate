@@ -31,7 +31,7 @@ function MFAPage() {
   return (
     <>
     <div className="wrapper">
-      <Header />
+      
       <div id="content">
         <div className="container mt-5">
           <div className="row justify-content-center">

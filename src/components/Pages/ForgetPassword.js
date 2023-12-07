@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import { forgetPassword } from "../../redux/authActions";
 import { useNavigate } from 'react-router-dom';
-import Header from "../UI/Header/Header"
 import Footer from "../UI/Footer/Footer"
 
 function ForgetPasswordComponent() {
@@ -48,14 +47,14 @@ function ForgetPasswordComponent() {
   return (
     <>
     <div className="wrapper">
-      <Header />
+      
       <div id="content">
         <div className="container mt-5">
             <div className="row justify-content-center">
             <div className="col-md-4">
                 <div className="card">
                 <div className="card-body">
-                    <h2 className="text-center mb-4 display-6">Forget Password</h2>
+                    <h2 className="text-center mb-4 display-6">Forgot Password</h2>
                     {error && <p className="text-danger text-center">{error}</p>}
                     {message && <p className="text-success text-center">{message}</p>}
                     

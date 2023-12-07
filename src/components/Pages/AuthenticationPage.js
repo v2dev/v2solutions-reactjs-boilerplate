@@ -87,7 +87,7 @@ function AuthenticationPage() {
   return (
     <>
     <div className="wrapper">
-      <Header />
+      
         <div id="content">
         <div className="container mt-5">
           {!loggedIn ? (
@@ -177,7 +177,7 @@ function AuthenticationPage() {
                         |
                       </Link>
                       <span className="text-primary ms-1">
-                        <Link to="/forget-password">Forget Password</Link>
+                        <Link to="/forgot-password">Forgot Password</Link>
                       </span>
                     </p>
                   </div>
