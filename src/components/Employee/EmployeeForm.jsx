@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
+import React, { useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import API_ENDPOINTS from '../../configs/apiConfig';
 import useCrudApi from '../../hooks/useCrudApi';
 import { connect } from 'react-redux';
 import { addEmployee as addEmployeeAction, updateEmployee as updateEmployeeAction } from '../../redux/employeeActions';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
+import BaseForm from '../UI/BaseForm/BaseForm';
 
 const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
   const apiEndpoint = API_ENDPOINTS.EMPLOYEES;
@@ -15,105 +15,51 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [employeeData, setEmployeeData] = useState({
-    emp_id: '',
-    name: '',
-    email: '',
-    dob: '',
-    designation: '',
-    education: '',
-  });
+  const inputConfig = [
+    { name: 'name', label: 'Name', type: 'text', required: true },
+    { name: 'email', label: 'Email', type: 'text', required: true },
+    { name: 'dob', label: 'Date of Birth', type: 'date', required: true },
+    { name: 'designation', label: 'Designation', type: 'text', required: true },
+    { name: 'education', label: 'Education', type: 'text', required: true },
+  ];
 
-  const [dobDatePicker, setDobDatePicker] = useState(null);
+  const validationLogic = (formData) => {
+    const errors = {};
 
-  const [formErrors, setFormErrors] = useState({});
-  const [isEdit, setIsEdit] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+    inputConfig.forEach((config) => {
+      const { name, label, type, required } = config;
 
-  useEffect(() => {
-    if (id) {
-      fetchEmployeeData();
-    }
-  }, [id, employees, navigate]);
+      if (required && (!formData[name] || formData[name].trim() === '')) {
+        errors[name] = `${label} is required`;
+      }
 
-  const fetchEmployeeData = async () => {
+      if (type === 'date' && formData[name]) {
+        const today = moment();
+        const dob = moment(formData[name], 'YYYY-MM-DD');
+        const isDobValid = today.diff(dob, 'years') >= 18;
+
+        if (!isDobValid) {
+          errors[name] = 'Must be at least 18 years old.';
+        }
+      }
+    });
+
+    return errors;
+  };
+
+  const handleSubmit = async (formData) => {
     try {
-      const response = await getData(`/${id}`);
-      if (response && !response.error) {
-        const formattedEmployeeData = { ...response };
-        setEmployeeData(formattedEmployeeData);
-        setIsEdit(true);
-        const dobDate = moment(formattedEmployeeData.dob, 'YYYY-MM-DD').toDate();
-        setDobDatePicker(dobDate);
-  
+      const response = id ? await updateData(`${id}`, formData) : await postData(formData);
+      if (response.error) {
+        // Handle error
       } else {
-        navigate('/employee');
+        const action = id ? updateEmployee : addEmployee;
+        action(response.data);
+        setSuccessMessage(`Employee ${id ? 'updated' : 'added'} successfully.`);
+        navigate('/employee', { state: { successMessage } });
       }
     } catch (error) {
-      console.error('Error fetching employee data:', error);
-      navigate('/employee');
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // Validate dob with moment.js for both formats (YYYY-MM-DD and DD-MM-YYYY)
-    const isValidDob = moment(value, ['YYYY-MM-DD'], true).isValid();
-
-    setEmployeeData({ ...employeeData, [name]: value });
-    setFormErrors({
-      ...formErrors,
-      [name]: name === 'dob' && !isValidDob ? 'Invalid date format. Use dd-mm-yyyy ' : '',
-    });
-  };
-
-  const handleDateChange = (date) => {
-    const selectedDate = moment(date).format('YYYY-MM-DD');
-  
-    // Validate dob to be at least 18 years ago
-    const today = moment();
-    const dob = moment(selectedDate);
-    const isDobValid = today.diff(dob, 'years') >= 18;
-  
-    setEmployeeData({ ...employeeData, dob: selectedDate });
-    setFormErrors({
-      ...formErrors,
-      dob: isDobValid ? '' : 'Employee must be at least 18 years old.',
-    });
-  
-    setDobDatePicker(date);
-  };
-  
-  const validateForm = () => {
-    const errors = {};
-    ['name', 'email', 'dob', 'designation', 'education'].forEach((field) => {
-      if (!employeeData[field]) {
-        errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
-      }
-    });
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      try {
-        const response = isEdit ? await updateData(`${id}`, employeeData) : await postData(employeeData);
-        if (response.error) {
-          setErrorMessage(response.error);
-        } else {
-          const action = isEdit ? updateEmployee : addEmployee;
-          action(response.data);
-          setSuccessMessage(`Employee ${isEdit ? 'updated' : 'added'} successfully.`);
-          navigate('/employee', { state: { successMessage: `Employee ${isEdit ? 'updated' : 'added'} successfully.` } });
-          setEmployeeData({ emp_id: '', name: '', email: '', dob: '', designation: '', education: '' });
-        }
-      } catch (error) {
-        console.error(`Error ${isEdit ? 'updating' : 'adding'} employee:`, error);
-        setErrorMessage(`Failed to ${isEdit ? 'update' : 'add'} employee. Please try again.`);
-      }
+      // Handle error
     }
   };
 
@@ -123,44 +69,13 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
-              <h2 className="text-center mb-4">{isEdit ? 'Edit Employee' : 'Add Employee'}</h2>
-              <form onSubmit={handleSubmit}>
-                {successMessage && <div className="alert alert-success">{successMessage}</div>}
-                {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-
-                {['name', 'email', 'dob', 'designation', 'education'].map((field) => (
-                  <div key={field} className="mb-3">
-                    <label htmlFor={field} className="form-label">{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-                    {field === 'dob' ? (
-                      <DatePicker
-                        selected={dobDatePicker}
-                        onChange={handleDateChange}
-                        className={`form-control ${formErrors[field] ? 'is-invalid' : ''}`}
-                        dateFormat="dd-MM-yyyy"
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        className={`form-control ${formErrors[field] ? 'is-invalid' : ''}`}
-                        id={field}
-                        name={field}
-                        value={employeeData[field]}
-                        onChange={handleInputChange}
-                      />
-                    )}
-                    {formErrors[field] && <div className={`invalid-feedback ${formErrors[field] ? 'd-block' : ''}`}>{formErrors[field]}</div>}
-                  </div>
-                ))}
-
-                <div className="d-flex justify-content-between">
-                  <Link to="/employee" className="btn btn-danger">
-                    Cancel
-                  </Link>
-                  <button type="submit" className="btn btn-primary">
-                    {isEdit ? 'Update' : 'Add'}
-                  </button>
-                </div>
-              </form>
+              <h2 className="text-center mb-4">{id ? 'Edit Employee' : 'Add Employee'}</h2>
+              <BaseForm
+                inputConfig={inputConfig}
+                validationLogic={validationLogic}
+                onSubmit={handleSubmit}
+                navigate={() => navigate('/employee')}
+              />
             </div>
           </div>
         </div>
@@ -168,6 +83,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
     </div>
   );
 };
+
 
 const mapStateToProps = (state) => ({
   employees: state.employees,

@@ -42,7 +42,7 @@ const ListBase = ({
     try {
       const response = await fetchData(`?page=${page}&limit=${rowsPerPage}&sort=${sortOrder}&sortedColumn=${sortColumn}&filter=${filterValue}`);
       if (response && !response.error) {
-        setData(response.employees); 
+        setData(response.data); 
         setTotalPages(response.totalPages);
         setCurrentPage(page);
       } else if (response && response.error) {
@@ -127,8 +127,7 @@ const ListBase = ({
         <button
           className="btn btn-danger"
           onClick={() => {
-            setDeletingItem(item);
-            setConfirmDelete(true);
+             setConfirmDelete(item);
           }}
         >
           Delete
@@ -223,7 +222,7 @@ const ListBase = ({
                         <button
                           type="button"
                           className="btn btn-secondary"
-                          onClick={() => setConfirmDelete(false)}
+                          onClick={() => setConfirmDelete(item)}
                         >
                           Cancel
                         </button>

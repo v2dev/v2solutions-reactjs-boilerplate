@@ -5,7 +5,7 @@ export const login = (email, password) => {
   return async (dispatch) => {
     try {
       // Make the API call for login
-      const response = await fetch(API_BASE_URL + "/user/login", {
+      const response = await fetch(API_BASE_URL + "/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export const register = (email, password, name,country) => {
   return async (dispatch) => {
       try {
         console.log(country);
-        const response = await fetch(API_BASE_URL + "/user/signup", {
+        const response = await fetch(API_BASE_URL + "/signup", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export const forgetPassword = (email) => {
   return async (dispatch) => {
     try {
       // Make the API call for login
-      const response = await fetch(API_BASE_URL + "/user/forgot-password", {
+      const response = await fetch(API_BASE_URL + "/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ export const resetPasswordAction = (otp,password, confirmPassword,token) => {
         requestBody.token = token;
       }
 
-      const response = await fetch(`${API_BASE_URL}/user/reset-password`, {
+      const response = await fetch(`${API_BASE_URL}/reset-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -174,7 +174,7 @@ export const verifyMFA = (mfaToken,email) => {
   return async (dispatch) => {
     try {
       // Make the API call for MFA verification
-      const response = await fetch(API_BASE_URL + "/user/mfa-verify", {
+      const response = await fetch(API_BASE_URL + "/mfa-verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
