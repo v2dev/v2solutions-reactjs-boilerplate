@@ -3,6 +3,7 @@
 const path = require("path")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   // Entry point that indicates where
@@ -23,7 +24,9 @@ module.exports = {
       },
     ],
   },
-  plugins: [new MiniCssExtractPlugin()],
+  plugins: [new MiniCssExtractPlugin(),
+     new Dotenv(), // Load environment variables from .env file
+],
   optimization: {
     minimize: true,
     minimizer: [new CssMinimizerPlugin()],
