@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, register } from '../../redux/authActions';
 import { useNavigate, Link } from 'react-router-dom';
-import Header from "../UI/Header/Header"
 import Footer from "../UI/Footer/Footer"
+import GoogleLoginButton from '../Util/Google/GoogleLoginButton';
 
 function AuthenticationPage() {
   const dispatch = useDispatch();
@@ -83,7 +83,7 @@ function AuthenticationPage() {
     setLoginMode(mode);
     clearForm();
   };
-
+  
   return (
     <>
     <div className="wrapper">
@@ -180,6 +180,8 @@ function AuthenticationPage() {
                         <Link to="/forgot-password">Forgot Password</Link>
                       </span>
                     </p>
+                    <GoogleLoginButton/>
+
                   </div>
                 </div>
               </div>

@@ -204,6 +204,36 @@ export const verifyMFA = (mfaToken,email) => {
 };
 
 
+export const verifyGoogleToken = (credentialResponse) => {
+
+  return async (dispatch) => {
+    try {
+      const googleAccessToken = credentialResponse.credential
+      
+      const response = await fetch(API_BASE_URL + "/verify-google-token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: googleAccessToken }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.jwtToken);
+        dispatch({ type: 'LOGIN_SUCCESS', payload: data });
+        return { success: true };
+      } else {
+        const data = await response.json();
+        dispatch({ type: 'LOGIN_FAILURE', error: data.error });
+        return { success: false };
+      }
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAILURE' });
+      return { success: false };
+    }
+  };
+};
 const decodeToken = (token) => {
   const tokenParts = token.split('.'); // Split the token into its parts
   if (tokenParts.length === 3) {

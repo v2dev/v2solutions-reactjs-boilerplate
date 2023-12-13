@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useDispatch ,useSelector } from 'react-redux';
 import { verifyMFA } from '../../redux/authActions';
 import { useNavigate } from 'react-router-dom';
-import Header from "../UI/Header/Header"
 import Footer from "../UI/Footer/Footer"
 
 function MFAPage() {
