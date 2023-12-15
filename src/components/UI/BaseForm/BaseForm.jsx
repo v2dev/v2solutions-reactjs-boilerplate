@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -12,7 +13,9 @@ const BaseForm = ({ inputConfig, onSubmit, validationLogic, navigate, initialDat
     if (initialData) {
       setFormData(initialData);
       if (inputConfig.some((config) => config.type === 'date')) {
-        const dobDate = moment(initialData.dob, 'YYYY-MM-DD').toDate();
+        const dateOnlyString = initialData.dob.split('T')[0];
+        const dobDate = new Date(dateOnlyString);
+  
         setDatePicker(dobDate);
       }
     }
@@ -55,6 +58,8 @@ const BaseForm = ({ inputConfig, onSubmit, validationLogic, navigate, initialDat
               onChange={handleDateChange}
               className={`form-control ${formErrors[config.name] ? 'is-invalid' : ''}`}
               dateFormat="dd-MM-yyyy"
+              name={config.name}
+              value={formData[config.name] || ''}
             />
           ) : (
             <input

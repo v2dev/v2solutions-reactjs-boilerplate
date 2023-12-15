@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import React, { useState,useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import API_ENDPOINTS from '../../configs/apiConfig';
 import useCrudApi from '../../hooks/useCrudApi';
@@ -8,10 +9,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 import BaseForm from '../UI/BaseForm/BaseForm';
 
-const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
+const EmployeeForm = ({ addEmployee, updateEmployee }) => {
   const apiEndpoint = API_ENDPOINTS.EMPLOYEES;
   const { postData, updateData, getData } = useCrudApi(apiEndpoint);
   const [successMessage, setSuccessMessage] = useState('');
+  const [formData, setFormData] = useState('');
+  
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -22,7 +25,30 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
     { name: 'designation', label: 'Designation', type: 'text', required: true },
     { name: 'education', label: 'Education', type: 'text', required: true },
   ];
-
+  useEffect(() => {
+    console.log('Effect is running');
+    const fetchData = async () => {
+      try {
+        const employeeData = await getData(`/${id}`);
+        console.log('Fetched data:', employeeData);
+        if (employeeData.error) {
+          // Handle error
+        } else {
+          // Set initial data for the form
+          setFormData(employeeData.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle error
+      }
+    };
+  
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
+  
+    
   const validationLogic = (formData) => {
     const errors = {};
 
@@ -75,6 +101,8 @@ const EmployeeForm = ({ addEmployee, updateEmployee, employees }) => {
                 validationLogic={validationLogic}
                 onSubmit={handleSubmit}
                 navigate={() => navigate('/employee')}
+                initialData={id ? formData : undefined}
+
               />
             </div>
           </div>

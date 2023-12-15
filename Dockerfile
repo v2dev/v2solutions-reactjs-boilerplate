@@ -1,13 +1,28 @@
 FROM node:14-alpine AS development
-ENV NODE_ENV development
-# Add a work directory
-WORKDIR /app
-# Cache and Install dependencies
-COPY package.json .
+
+# define variables and defaults will be passed in from team city
+ARG buildConfig=Release
+ARG buildNumber=1.0.0
+ARG buildEnvironment=production
+
+# for caching optimisations
+COPY package*.json /
 RUN npm install
-# Copy app files
+
+# required to serve the react app on the live server
+RUN npm install -g serve
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 COPY . .
-# Expose port
+RUN ls -AlF
+
+ENV BUILD_CONFIG $buildConfig
+ENV BUILD_NUMBER $buildNumber
+ENV BUILD_ENVIRONMENT $buildEnvironment
+ENV NODE_ENV=$buildEnvironment
+ENV PORT=3000
+
+CMD [ "npm", "run", "deploy" ]
+
 EXPOSE 3000
-# Start the app
-CMD [ "npm", "start" ]

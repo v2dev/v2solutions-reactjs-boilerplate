@@ -39,7 +39,7 @@ const useCrudApi = (apiEndpoint) => {
 
     try {
       const response = await axios.get(API_BASE_URL + apiEndpoint+param)
-      return response.data.data
+      return response.data
     } catch (error) {
       setError(error)
     }
@@ -68,11 +68,6 @@ const useCrudApi = (apiEndpoint) => {
       return error
     }
   }
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, [apiEndpoint]); // Fetch data when the component mounts or apiEndpoint changes
-
   return { isLoading, error, fetchData, postData, updateData, deleteData,getData }
 }
 

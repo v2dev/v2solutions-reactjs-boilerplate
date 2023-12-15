@@ -10,12 +10,14 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import AuthenticationPage from '../components/Pages/AuthenticationPage';
 import { BrowserRouter } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const mockStore = configureMockStore();
 
 describe('AuthenticationPage', () => {
     let store;
-  
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
     beforeEach(() => {
       store = mockStore({
         auth: {
@@ -28,7 +30,9 @@ describe('AuthenticationPage', () => {
         const { getByText, getByLabelText } = render(
           <Provider store={store}>
             <BrowserRouter>
-              <AuthenticationPage />
+              <GoogleOAuthProvider clientId={clientId}>
+                <AuthenticationPage />
+                </GoogleOAuthProvider>
             </BrowserRouter>
           </Provider>
         );
@@ -38,7 +42,9 @@ describe('AuthenticationPage', () => {
       const { getByText, getByLabelText } = render(
         <Provider store={store}>
           <BrowserRouter> {/* Wrap with BrowserRouter */}
-            <AuthenticationPage />
+            <GoogleOAuthProvider clientId={clientId}>
+              <AuthenticationPage />
+              </GoogleOAuthProvider>
           </BrowserRouter>
         </Provider>
       );
