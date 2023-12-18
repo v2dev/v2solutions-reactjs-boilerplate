@@ -24,7 +24,6 @@ function Header({ isAuthenticated, logoutUser }) {
 
   return (
     <div className="header-container">
-     
       <nav id="sidebar" className={isCollapsed ? "collapsed" : ""}>
         <div className="sidebar-header">
           <button className="collapse-btn" onClick={handleToggleCollapse}>

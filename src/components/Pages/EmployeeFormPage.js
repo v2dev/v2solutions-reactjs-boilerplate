@@ -6,9 +6,11 @@ import Footer from "../UI/Footer/Footer"
 function EmployeeFormPage() {
   return (
     <>
-    <div className="wrapper">
+    <div className="container">
+      
       <Header />
-      <div id="content">
+
+      <div id="content"  className="content">
         <EmployeeForm />
       </div>
     </div>

@@ -11,7 +11,7 @@ function EmployeeListPage() {
     <>
       <div className="wrapper">
         <Header />
-        <div id="content">
+        <div id="content" className="content">
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
               <Breadcrumb />

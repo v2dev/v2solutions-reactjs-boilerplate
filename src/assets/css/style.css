@@ -418,3 +418,23 @@ p {
 .collapse-btn:hover {
   background-color: #555;
 }
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px; /* Adjust the width as needed */
+  background-color: #f2f2f2; /* Sidebar background color */
+  padding: 20px; /* Adjust the padding as needed */
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px; /* Adjust the padding as needed */
+}
+.header-container{
+  width: 270px; /* Adjust the width as needed */
+  padding: 20px; /* Adjust the padding as needed */
+
+}
