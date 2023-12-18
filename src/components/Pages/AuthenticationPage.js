@@ -89,7 +89,7 @@ function AuthenticationPage() {
     <div className="wrapper">
       
         <div id="content">
-        <div className="container mt-5">
+        <div className=" mt-5">
           {!loggedIn ? (
             <div className="row justify-content-center">
               <div className="col-md-4">

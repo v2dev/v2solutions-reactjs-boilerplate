@@ -11,7 +11,7 @@ function HomePage() {
         <div className="wrapper ">
           <Header />
           <div id="content">
-          <div className="container mt-5">
+          <div className="mt-5">
             <div className="row justify-content-center">
               <div className="col-md-8 mt-5">
                 <div className="text-center home">
