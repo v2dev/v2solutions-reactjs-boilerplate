@@ -36,6 +36,7 @@ const EmployeeForm = ({ addEmployee, updateEmployee }) => {
         } else {
           // Set initial data for the form
           setFormData(employeeData.data);
+          
         }
       } catch (error) {
         console.error('Error fetching data:', error);

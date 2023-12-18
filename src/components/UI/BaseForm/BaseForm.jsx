@@ -6,36 +6,54 @@ import moment from 'moment';
 
 const BaseForm = ({ inputConfig, onSubmit, validationLogic, navigate, initialData }) => {
   const [formData, setFormData] = useState(initialData || {});
-  const [datePicker, setDatePicker] = useState(null);
   const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     if (initialData) {
       setFormData(initialData);
-      if (inputConfig.some((config) => config.type === 'date')) {
-        const dateOnlyString = initialData.dob.split('T')[0];
-        const dobDate = new Date(dateOnlyString);
-  
-        setDatePicker(dobDate);
-      }
     }
-  }, [initialData, inputConfig]);
+  }, [initialData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (date, name) => {
     const selectedDate = moment(date).format('YYYY-MM-DD');
-    setFormData({ ...formData, dob: selectedDate });
-    setDatePicker(date);
+    setFormData({ ...formData, [name]: selectedDate });
   };
 
   const validateForm = () => {
     const errors = validationLogic(formData);
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
+  };
+
+  const renderInput = (config) => {
+    const { name, type } = config;
+
+    if (type === 'date') {
+      return (
+        <DatePicker
+          selected={formData[name] ? moment(formData[name], 'YYYY-MM-DD').toDate() : null}
+          onChange={(date) => handleDateChange(date, name)}
+          className={`form-control ${formErrors[name] ? 'is-invalid' : ''}`}
+          dateFormat="dd-MM-yyyy"
+        />
+      );
+    } else {
+      return (
+        <input
+          type="text"
+          className={`form-control ${formErrors[name] ? 'is-invalid' : ''}`}
+          id={name}
+          name={name}
+          value={formData[name] || ''}
+          onChange={handleInputChange}
+        />
+      );
+    }
   };
 
   const handleSubmit = (e) => {
@@ -52,25 +70,7 @@ const BaseForm = ({ inputConfig, onSubmit, validationLogic, navigate, initialDat
           <label htmlFor={config.name} className="form-label">
             {config.label}
           </label>
-          {config.type === 'date' ? (
-            <DatePicker
-              selected={datePicker}
-              onChange={handleDateChange}
-              className={`form-control ${formErrors[config.name] ? 'is-invalid' : ''}`}
-              dateFormat="dd-MM-yyyy"
-              name={config.name}
-              value={formData[config.name] || ''}
-            />
-          ) : (
-            <input
-              type="text"
-              className={`form-control ${formErrors[config.name] ? 'is-invalid' : ''}`}
-              id={config.name}
-              name={config.name}
-              value={formData[config.name] || ''}
-              onChange={handleInputChange}
-            />
-          )}
+          {renderInput(config)}
           {formErrors[config.name] && (
             <div className={`invalid-feedback ${formErrors[config.name] ? 'd-block' : ''}`}>
               {formErrors[config.name]}
@@ -79,16 +79,14 @@ const BaseForm = ({ inputConfig, onSubmit, validationLogic, navigate, initialDat
         </div>
       ))}
       <div className="d-flex justify-content-between">
-      {navigate && (
-        <button type="button" className="btn btn-danger ml-2" onClick={() => navigate()}>
-          Cancel
+        {navigate && (
+          <button type="button" className="btn btn-danger ml-2" onClick={() => navigate()}>
+            Cancel
+          </button>
+        )}
+        <button type="submit" className="btn btn-primary">
+          Submit
         </button>
-        
-      )}
-      <button type="submit" className="btn btn-primary">
-        Submit
-      </button>
-      
       </div>
     </form>
   );
