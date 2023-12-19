@@ -77,8 +77,8 @@ const ListBase = ({
 
 
 
-  const handleRowsPerPageChange = (e) => {
-    const newRowsPerPage = parseInt(e.target.value, 10);
+  const handleRowsPerPageChange = (value) => {
+    const newRowsPerPage = parseInt(value);
     setRowsPerPage(newRowsPerPage);
   };
 
@@ -103,6 +103,8 @@ const ListBase = ({
         return <span>{value}</span>; // Assume string type by default
     }
   };
+  
+
 
   const renderTableRows = () => {
   return data && data.map((item) => (
@@ -186,18 +188,16 @@ const ListBase = ({
                   <label htmlFor="rowsPerPage" className="form-label mr-2">
                     Row Per Page:
                   </label>
-                  <select
-                    id="rowsPerPage"
-                    className="form-control"
-                    value={rowsPerPage}
-                    onChange={handleRowsPerPageChange}
-                  >
-                    {rowsPerPageOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
+                  {rowsPerPageOptions.map((option) => (
+                    <button
+                      key={option}
+                      className={`btn ${rowsPerPage === option ? 'btn-primary' : 'btn-secondary'}`}
+                      onClick={() => handleRowsPerPageChange(option)}
+                    >
+                      {option}
+                    </button>
+                  ))}
+
                 </div>
               </div>
 

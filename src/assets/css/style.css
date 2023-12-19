@@ -1,6 +1,6 @@
 :root {
   --primary: #ececec;
-  --secondary: #9fd3c7;
+  --secondary: #dee2e6;
   --primaryclr: #385170;
   --info: #142d4c;
 }
@@ -301,8 +301,8 @@ a.article:hover {
 }
 
 .btn-secondary {
-  background-color: var(--secondary);
-  border-color: var(--secondary);
+  background-color: #fff;
+  border-color: var(--primaryclr);
   color: var(--primaryclr);
 }
 
@@ -324,13 +324,13 @@ a.article:hover {
 }
 
 .pagination .page-link {
-  
+  border-color: var(--primaryclr);
   color: var(--primaryclr); /* Set the text color to be visible on the dark background */
 }
 
 .pagination .page-item.active .page-link {
   background-color: var(--primaryclr);
-  border-color: var(--primaryclr);
+  
   color: #fff; /* Set the text color to be visible on the dark background */
 }
 .alert-success {
