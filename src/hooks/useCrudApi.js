@@ -16,9 +16,13 @@ const useCrudApi = (apiEndpoint) => {
     try {
 
       const response = await axios.get(API_BASE_URL + apiEndpoint+ param)
+      setIsLoading(false); // Move this line inside the try block
+
       return response.data
     } catch (error) {
       setError(error)
+      setIsLoading(false); // Move this line inside the try block
+
     }
 
     setIsLoading(false)
@@ -39,12 +43,14 @@ const useCrudApi = (apiEndpoint) => {
 
     try {
       const response = await axios.get(API_BASE_URL + apiEndpoint+param)
+      setIsLoading(false); // Move this line inside the try block
+
       return response.data
     } catch (error) {
+      setIsLoading(false);
+
       setError(error)
     }
-
-    setIsLoading(false)
   }
 
   const updateData = async (itemId, updatedData) => {

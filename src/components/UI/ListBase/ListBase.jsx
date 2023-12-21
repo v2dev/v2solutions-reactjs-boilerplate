@@ -26,17 +26,14 @@ const ListBase = ({
 
 
   useEffect(() => {
-    fetchAndSetData();
+    
+    fetchAndSetData(1);
     const timer = setTimeout(() => {
       setSuccessMessage('');
     }, 5000);
-
     return () => clearTimeout(timer);
-  }, [successMessage]);
-
-  useEffect(() => {
-    fetchAndSetData(1);
-  }, [rowsPerPage]);
+    
+  }, [rowsPerPage,successMessage]);
 
   const fetchAndSetData = async (page = 1, filterValue = '') => {
     try {
@@ -108,7 +105,7 @@ const ListBase = ({
 
   const renderTableRows = () => {
   return data && data.map((item) => (
-    <tr key={item.emp_id}>
+    <tr key={item._id}>
       {listColumns.map((column) => (
         <td key={column.key}>{renderColumnContent(column, item)}</td>
       ))}

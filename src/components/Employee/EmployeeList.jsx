@@ -13,8 +13,10 @@ const EmployeeList = () => {
   ];
   
 
+
   return (
     <ListBase
+
       apiEndpoint={API_ENDPOINTS.EMPLOYEES}
       listColumns={employeeListColumns}
       editRoutePattern="/employee/edit" // Provide your custom edit route pattern

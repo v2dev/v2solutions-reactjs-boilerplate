@@ -7,6 +7,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
+
   // Setup Axios Interceptor
   setupAxiosInterceptor();
 
