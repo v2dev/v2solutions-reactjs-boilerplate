@@ -11,7 +11,7 @@ pipeline{
         }
         stage("git"){
             steps{
-                git branch: 'chandru_devops_scripts', url: 'https://github.com/v2dev/v2solutions-reactjs-boilerplate.git'
+                git branch: 'Chandrashekar_main', url: 'https://github.com/v2dev/v2solutions-reactjs-boilerplate.git'
             }
         }
         stage("build"){
