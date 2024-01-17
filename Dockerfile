@@ -1,28 +1,40 @@
-FROM node:14-alpine AS development
+# Stage 1: Build
+FROM node:14-alpine AS build
 
-# define variables and defaults will be passed in from team city
-ARG buildConfig=Release
-ARG buildNumber=1.0.0
-ARG buildEnvironment=production
+# Create and set working directory
+WORKDIR /usr/src/app
 
-# for caching optimisations
-COPY package*.json /
+# Copy only package files for dependency installation
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-# required to serve the react app on the live server
-RUN npm install -g serve
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+# Copy the rest of the application files
 COPY . .
-RUN ls -AlF
 
-ENV BUILD_CONFIG $buildConfig
-ENV BUILD_NUMBER $buildNumber
-ENV BUILD_ENVIRONMENT $buildEnvironment
-ENV NODE_ENV=$buildEnvironment
+# Build the React app
+RUN npm run build
+
+# Stage 2: Production Image
+FROM node:14-alpine AS production
+
+# Create and set working directory
+WORKDIR /usr/src/app
+
+# Copy only necessary files from the build stage
+COPY --from=build /usr/src/app/dist ./
+
+# Copy package.json and install only production dependencies
+COPY --from=build /usr/src/app/package*.json ./
+RUN npm install --production
+
+# Set environment variables
+ENV NODE_ENV=production
 ENV PORT=3000
 
-CMD [ "npm", "run", "deploy" ]
-
+# Expose port
 EXPOSE 3000
+
+# Command to run the application
+CMD ["npm", "start"]
