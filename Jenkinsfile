@@ -24,9 +24,6 @@ pipeline{
             }
         }
         stage("push"){
-            when {
-                expression { currentBuild.changeSets.any { it.branch == 'Chandrashekar_main' } }
-            }
             steps{
                 withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
                     bat '@echo off'
