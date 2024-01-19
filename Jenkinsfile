@@ -12,7 +12,7 @@ pipeline{
     stages{
         stage("Initialise"){
             steps{
-                cleanWs()
+                // cleanWs()
             }
         }
         stage("git"){
@@ -24,7 +24,10 @@ pipeline{
         stage('SonarQube Scan') {
             steps {
                 script {
+                    echo "Environment Variables:"
+                    sh "printenv"
                     def scannerHome = tool 'SonarQubeScanner'
+                    echo "Current working directory: ${pwd()}"
                     withSonarQubeEnv(SONARQUBE_SERVER) {
                         sh "\"${scannerHome}/bin/sonar-scanner\" -Dsonar.login=${SONARQUBE_CREDENTIALS}"
                         // bat "${scannerHome}/bin/sonar-scanner.bat -D\"sonar.projectKey=Reactjs\" -D\"sonar.sources=.\" -D\"sonar.host.url=${SONARQUBE_SERVER}\" -D\"sonar.login=sqp_7cc24242be902c251b7796c4512b1620da638125\""
