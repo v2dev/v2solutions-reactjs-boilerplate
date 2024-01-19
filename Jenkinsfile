@@ -21,36 +21,38 @@ pipeline{
             }
         }
 
-        stage('Print') {
-            steps {
-                bat '@echo off'
-                bat 'echo %WORKSPACE%'
-                dir("DevOpsScripts") {
-                    bat './print_script.bat'
-                }
-                // script {
-                //     echo "Environment Variables:"
-                //     sh "printenv"
-                //     echo "Current working directory: ${pwd()}"
-                // }
-            }   
-        }
-
-        // stage('SonarQube Scan') {
+        // stage('Print') {
         //     steps {
-        //         script {
-        //             echo "Environment Variables:"
-        //             sh "printenv"
-        //             echo "Current working directory: ${pwd()}"
-        //             def scannerHome = tool 'SonarQubeScanner'
-        //             echo "Current working directory: ${pwd()}"
-        //             withSonarQubeEnv(SONARQUBE_SERVER) {
-        //                 sh "\"${scannerHome}/bin/sonar-scanner\" -Dsonar.login=${SONARQUBE_CREDENTIALS}"
-        //                 // bat "${scannerHome}/bin/sonar-scanner.bat -D\"sonar.projectKey=Reactjs\" -D\"sonar.sources=.\" -D\"sonar.host.url=${SONARQUBE_SERVER}\" -D\"sonar.login=sqp_7cc24242be902c251b7796c4512b1620da638125\""
-        //             }
+        //         bat '@echo off'
+        //         bat 'echo %WORKSPACE%'
+        //         dir("DevOpsScripts") {
+        //             bat './print_script.bat'
         //         }
+        //         // script {
+        //         //     echo "Environment Variables:"
+        //         //     sh "printenv"
+        //         //     echo "Current working directory: ${pwd()}"
+        //         // }
         //     }   
         // }
+
+        stage('SonarQube Scan') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQubeScanner'
+                    withSonarQubeEnv(SONARQUBE_SERVER) {
+                        bat '@echo off'
+                        bat 'echo %WORKSPACE%'
+                        dir("DevOpsScripts") {
+                            bat "./sonarqube_script.bat ${scannerHome}"
+                        }
+                        // sh "\"${scannerHome}/bin/sonar-scanner\" -Dsonar.login=${SONARQUBE_CREDENTIALS}"
+                        // sh "${scannerHome}/bin/sonar-scanner -Dsonar.login=${SONARQUBE_CREDENTIALS}"
+                        // bat "${scannerHome}/bin/sonar-scanner.bat -D\"sonar.projectKey=Reactjs\" -D\"sonar.sources=.\" -D\"sonar.host.url=${SONARQUBE_SERVER}\" -D\"sonar.login=sqp_7cc24242be902c251b7796c4512b1620da638125\""
+                    }
+                }
+            }   
+        }
 
         stage("build"){
             steps{
