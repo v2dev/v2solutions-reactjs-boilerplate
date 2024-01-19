@@ -40,11 +40,12 @@ pipeline{
             steps {
                 script {
                     def scannerHome = tool 'SonarQubeScanner'
+                    def projectKey = "Reactjs"
                     withSonarQubeEnv(SONARQUBE_SERVER) {
                         bat '@echo off'
                         bat 'echo %WORKSPACE%'
                         dir("DevOpsScripts") {
-                            bat "./sonarqube_script.bat ${scannerHome}"
+                            bat "./sonarqube_script.bat ${scannerHome} ${projectKey} -X"
                         }
                         // sh "\"${scannerHome}/bin/sonar-scanner\" -Dsonar.login=${SONARQUBE_CREDENTIALS}"
                         // sh "${scannerHome}/bin/sonar-scanner -Dsonar.login=${SONARQUBE_CREDENTIALS}"
