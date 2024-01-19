@@ -44,6 +44,9 @@ pipeline{
                     withSonarQubeEnv(SONARQUBE_SERVER) {
                         // bat '@echo off'
                         // bat 'echo %WORKSPACE%'
+                        echo "Current working directory: ${pwd()}"
+                        echo "Contents of workspace:"
+                        bat 'dir /s'
                         dir("DevOpsScripts") {
                             bat "./sonarqube_script.bat ${scannerHome} ${projectKey}"
                         }
