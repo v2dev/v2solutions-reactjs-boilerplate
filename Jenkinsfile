@@ -25,7 +25,7 @@ pipeline{
             steps {
                 script {
                     echo "Environment Variables:"
-                    // sh "printenv"
+                    sh "printenv"
                     echo "Current working directory: ${pwd()}"
                 }
             }   
