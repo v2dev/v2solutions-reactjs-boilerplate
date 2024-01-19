@@ -45,7 +45,7 @@ pipeline{
                         // bat '@echo off'
                         // bat 'echo %WORKSPACE%'
                         // dir("DevOpsScripts") {
-                        bat "./sonarqube_script.bat ${scannerHome} ${projectKey} -X"
+                        bat "./sonarqube_script.bat ${scannerHome} ${projectKey}"
                         // }
                         // sh "\"${scannerHome}/bin/sonar-scanner\" -Dsonar.login=${SONARQUBE_CREDENTIALS}"
                         // sh "${scannerHome}/bin/sonar-scanner -Dsonar.login=${SONARQUBE_CREDENTIALS}"
