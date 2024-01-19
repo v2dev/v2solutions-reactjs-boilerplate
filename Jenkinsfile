@@ -23,11 +23,16 @@ pipeline{
 
         stage('Print') {
             steps {
-                script {
-                    echo "Environment Variables:"
-                    sh "printenv"
-                    echo "Current working directory: ${pwd()}"
+                bat '@echo off'
+                bat 'echo %WORKSPACE%'
+                dir("DevOpsScripts") {
+                    bat './print_script.bat'
                 }
+                // script {
+                //     echo "Environment Variables:"
+                //     sh "printenv"
+                //     echo "Current working directory: ${pwd()}"
+                // }
             }   
         }
 
