@@ -21,11 +21,22 @@ pipeline{
             }
         }
 
+        stage('Print') {
+            steps {
+                script {
+                    echo "Environment Variables:"
+                    sh "printenv"
+                    echo "Current working directory: ${pwd()}"
+                }
+            }   
+        }
+
         stage('SonarQube Scan') {
             steps {
                 script {
                     echo "Environment Variables:"
                     sh "printenv"
+                    echo "Current working directory: ${pwd()}"
                     def scannerHome = tool 'SonarQubeScanner'
                     echo "Current working directory: ${pwd()}"
                     withSonarQubeEnv(SONARQUBE_SERVER) {
