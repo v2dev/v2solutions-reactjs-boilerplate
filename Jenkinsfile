@@ -45,8 +45,8 @@ pipeline{
                         // bat '@echo off'
                         // bat 'echo %WORKSPACE%'
                         echo "Current working directory: ${pwd()}"
-                        echo "Contents of workspace:"
-                        bat 'dir /s'
+                        // echo "Contents of workspace:"
+                        // bat 'dir /s'
                         // dir("DevOpsScripts") {
                         bat "./sonarqube_script.bat ${scannerHome} ${projectKey}"
                         // }
