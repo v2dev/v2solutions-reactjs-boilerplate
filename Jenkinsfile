@@ -35,6 +35,24 @@ pipeline{
             }   
         }
 
+        // Quality Gate Stage
+        stage('Quality Gate') {
+            steps {
+                script {
+                    withSonarQubeEnv(SONARQUBE_SERVER) {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Quality Gate failed: ${qg.status}"
+                        }
+                        else {
+                            echo "Quality Gate Success"
+                        }
+                    }
+                }
+            }
+        }
+
+        // Build Stage
         stage("build"){
             steps{
                 bat '@echo off'
@@ -45,6 +63,7 @@ pipeline{
             }
         }
 
+        // Push Images to docker hub
         stage("push"){
             steps{
                 withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
@@ -80,7 +99,7 @@ pipeline{
                     dir("reactjs-app-chart") {
                         withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
                             // Push the Helm chart to Docker Hub
-                            bat "helm push reactjs-app-0.1.0.tgz  oci://registry-1.docker.io/v2devops"
+                            bat "helm push react-js-app-chart-0.1.0.tgz  oci://registry-1.docker.io/v2devops"
                             // echo "helm chart push successful"
                         }
                     }
@@ -92,7 +111,7 @@ pipeline{
 
 def updateHelmChartValues(buildNumber) {
     // Read values.yaml file
-    def valuesYamlPath = "node-js-app-chart/values.yaml"
+    def valuesYamlPath = "react-js-app-chart/values.yaml"
     def valuesYamlContent = readFile(file: valuesYamlPath).trim()
 
     // Update image tag with the build number

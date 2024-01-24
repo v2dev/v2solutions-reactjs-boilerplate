@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "reactjs-app.name" -}}
+{{- define "react-js-app-chart.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "reactjs-app.fullname" -}}
+{{- define "react-js-app-chart.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "reactjs-app.chart" -}}
+{{- define "react-js-app-chart.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "reactjs-app.labels" -}}
-helm.sh/chart: {{ include "reactjs-app.chart" . }}
-{{ include "reactjs-app.selectorLabels" . }}
+{{- define "react-js-app-chart.labels" -}}
+helm.sh/chart: {{ include "react-js-app-chart.chart" . }}
+{{ include "react-js-app-chart.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "reactjs-app.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "reactjs-app.name" . }}
+{{- define "react-js-app-chart.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "react-js-app-chart.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "reactjs-app.serviceAccountName" -}}
+{{- define "react-js-app-chart.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "reactjs-app.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "react-js-app-chart.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
