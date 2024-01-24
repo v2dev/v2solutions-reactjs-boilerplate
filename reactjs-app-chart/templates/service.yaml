@@ -2,11 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "reactjs-app.fullname" . }}
+  labels:
+    {{- include "reactjs-app.labels" . | nindent 4 }}
 spec:
-  selector:
-    app: {{ include "reactjs-app.name" . }}
-  ports:
-    - protocol: TCP
-      port: {{ .Values.service.port }}
-      targetPort: 8080
   type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "reactjs-app.selectorLabels" . | nindent 4 }}

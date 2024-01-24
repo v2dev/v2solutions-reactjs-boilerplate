@@ -1,0 +1,9 @@
+replicaCount: 1
+image:
+  repository: v2devops/v2solutions-reactjs-boilerplate
+  tag: latest
+  pullPolicy: IfNotPresent
+service:
+  name: reactjs-app
+  type: ClusterIP
+  port: 8080
