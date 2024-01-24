@@ -44,6 +44,38 @@ pipeline{
                 }
             }
         }
+
+        // Helm Chart Stage
+        stage("Helm Chart") {
+            steps {
+                script {
+                    // Update Helm chart values.yaml with the build number
+                    updateHelmChartValues(env.BUILD_NUMBER)
+                    dir("reactjs-app-chart") {
+                        // Run commands to create the Helm chart (e.g., helm package)
+                        bat '@echo off'
+                        bat 'echo "Creating package"'
+                        bat 'helm package .'
+                    }
+                }
+            }
+        }
+
+        // Push Helm Chart to Docker Hub
+        stage("Push Helm Chart to Docker Hub") {
+            steps {
+                script {
+                    dir("reactjs-app-chart") {
+                        withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                            // Push the Helm chart to Docker Hub
+                            bat "helm push reactjs-app-0.1.0.tgz  oci://registry-1.docker.io/v2devops"
+                            // echo "helm chart push successful"
+                        }
+                    }
+                }
+            }
+        }
+
         stage("push"){
             steps{
                 withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
