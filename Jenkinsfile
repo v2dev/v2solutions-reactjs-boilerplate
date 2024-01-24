@@ -89,3 +89,15 @@ pipeline{
         }
     }
 }
+
+def updateHelmChartValues(buildNumber) {
+    // Read values.yaml file
+    def valuesYamlPath = "node-js-app-chart/values.yaml"
+    def valuesYamlContent = readFile(file: valuesYamlPath).trim()
+
+    // Update image tag with the build number
+    valuesYamlContent = valuesYamlContent.replaceAll(/tag: latest/, "tag: ${buildNumber}")
+
+    // Write updated values.yaml file
+    writeFile(file: valuesYamlPath, text: valuesYamlContent)
+}
