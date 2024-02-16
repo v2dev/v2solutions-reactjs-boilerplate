@@ -1,0 +1,72 @@
+// MFAPage.js
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { verifyMFA } from '../../redux/authActions';
+import { useNavigate } from 'react-router-dom';
+import Footer from "../UI/Footer/Footer"
+import { Button, TextField } from '@mui/material';
+
+const MFAPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const qrCodeData = useSelector((state) => state.auth.qrCodeData);
+  const email = useSelector((state) => state.auth.email) || {};
+  const navigate = useNavigate();
+  const [mfaCode, setMfaCode] = useState('');
+  const [error, setError] = useState('');
+
+
+
+  const handleMFAVerification = async (e) => {
+    e.preventDefault();
+    const mfaVerificationResult = await dispatch(verifyMFA(mfaCode, email));
+
+    if (mfaVerificationResult && mfaVerificationResult.success) {
+      console.log('MFA verification successful');
+      navigate('/');
+    } else {
+      setError('MFA verification failed. Please try again.');
+    }
+  };
+
+  return (
+    <React.Fragment>
+      <div className="wrapper">
+
+        <div id="content">
+          <div className="container mt-5">
+            <div className="row justify-content-center">
+              <div className="col-md-4">
+                <div className="card">
+                  <div className="card-body text-center">
+                    <h2 className="text-center mb-4">MFA Verification</h2>
+                    {qrCodeData && (
+                      <img src={qrCodeData} alt="QR Code" />
+                    )}
+
+                    <form onSubmit={handleMFAVerification}>
+                      <label htmlFor="mfaCode">Enter MFA Code:</label>
+                      <TextField
+                        type="text"
+                        id="mfaCode"
+                        value={mfaCode}
+                        onChange={(e) => setMfaCode(e.target.value)}
+                      />
+                      {error && <p className="text-danger">{error}</p>}
+                      <Button type="submit" className="btn btn-primary">
+                        Verify MFA
+                      </Button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <Footer />
+    </React.Fragment>
+  );
+}
+
+export default MFAPage;

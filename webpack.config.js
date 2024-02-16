@@ -8,14 +8,16 @@ const Dotenv = require("dotenv-webpack");
 module.exports = {
   // Entry point that indicates where
   // should the webpack starts bundling
-  entry: "./src/index.js",
+  entry: "./src/index.tsx",
   mode: "development",
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/, // checks for .js or .jsx files
+        test: /\.(ts|tsx)$/, // checks for .ts or .tsx files
+        //use:'ts-loader',
+        include:[path.resolve(__dirname,'src')],
         exclude: /(node_modules)/,
-        loader: "babel-loader",
+        loader: "babel-loader", //#TODO: use ts-loader here and resolve errors
         options: { presets: ["@babel/env"] },
       },
       {
@@ -34,7 +36,7 @@ module.exports = {
 
   // Options for resolving module requests
   // extensions that are used
-  resolve: { extensions: [".js", ".jsx"] },
+  resolve: { extensions: [".tsx", ".ts", ".js"] },
   // Output point is where webpack should
   // output the bundles and assets
   output: {

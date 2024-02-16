@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    /* Base Options: */
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "skipLibCheck": true /* Skips checking the types of .d.ts files. This is important for performance, because otherwise all node_modules will be checked. */,
+    "target": "es6" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "module": "esnext",
+    "allowJs": true, /* Allow JavaScript files to be a part of your program. */
+    "resolveJsonModule": true, /* Enable importing .json files. */
+    "jsx": "react-jsx" /* IMPORTANT! - this allows our JSX to be transpiled correctly */,    
+    "outDir": "dist", /* Specify an output folder for all emitted files. */
+    "moduleResolution": "node", /* Specify how TypeScript looks up a file from a given module specifier. */
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],            /* Specify a set of bundled library declaration files that describe the target runtime environment. */
+    /* Strictness */
+    "strict": true /* Enable all strict type-checking options. */,
+    "noUncheckedIndexedAccess": true, /* Prevents you from accessing an array or object without first checking if it's defined. This is a great way to prevent runtime errors, and should really be included in strict. */
+    "noImplicitAny": false, /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+    "allowSyntheticDefaultImports": true /* Need for Webpack config file */,
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+    "allowUnreachableCode": true, /* Disable error reporting for unreachable code. */
+    "useUnknownInCatchVariables":false /* This pattern ensures that error handling code becomes more comprehensive because you cannot guarantee that the object being thrown is a Error subclass ahead of time. With the flag useUnknownInCatchVariables enabled, then you do not need the additional syntax (: unknown) nor a linter rule to try enforce this behavior. */
+  },
+  "include": [
+    "src"
+  ],
+}
