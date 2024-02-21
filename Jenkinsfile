@@ -152,6 +152,9 @@ pipeline {
 
         // Install dependencies
         stage("Install dependencies") {
+            when {
+                expression { params.INFRA_ACTION != 'destroy' }
+            }
             steps {
                 bat '@echo off'
                 bat 'echo %WORKSPACE%'
@@ -162,6 +165,9 @@ pipeline {
 
         // Install dependencies and Build Reactjs App
         stage("Build Reactjs App") {
+            when {
+                expression { params.INFRA_ACTION != 'destroy' }
+            }
             steps {
                 script {
                     // Modify environment.prod.ts file with the provided EKS_API_ENDPOINT
@@ -202,6 +208,7 @@ pipeline {
                     // Perform the copy operation if the bucket exists
                     if (bucketExists) {
                         bat 'aws s3 cp dist s3://v2-reactjs-boilerplate --recursive'
+                        bat 'aws s3 cp public s3://v2-reactjs-boilerplate --recursive'
                     } else {
                         echo "Skipping copy operation as the bucket does not exist."
                         echo "Provide 'create' value for INFRA_ACTION parameter while running the pipeline."
