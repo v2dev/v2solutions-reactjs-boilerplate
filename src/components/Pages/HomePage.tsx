@@ -1,13 +1,13 @@
-import React, { useEffect } from "react"
-import Header from "../UI/Header/Header"
+import React, { useEffect } from "react";
+import Header from "../UI/Header/Header";
 import { useDispatch, useSelector } from 'react-redux';
-import Footer from "../UI/Footer/Footer"
+import Footer from "../UI/Footer/Footer";
 import { RootState } from "../../redux/store";
 import { jwtDecode } from "jwt-decode";
 
 const HomePage: React.FC = () => {
   const { loggedIn } = useSelector((state: RootState) => state.auth) || {};
-  
+
   return (
     <React.Fragment>
       <div className="wrapper ">
@@ -28,7 +28,6 @@ const HomePage: React.FC = () => {
                       <h2>Please login first</h2>
                     </div>
                   )}
-
                 </div>
               </div>
             </div>

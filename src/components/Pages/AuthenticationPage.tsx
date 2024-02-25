@@ -90,13 +90,13 @@ const AuthenticationPage: React.FC = () => {
 
   return (
     <>
-      <div className="wrapper">
+ <div className="wrapper" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+
         <div id="content">
           <div className=" mt-5">
             {!loggedIn ? (
               <div className="row justify-content-center">
-                <div className="col-md-4">
-                  <div className="card">
+                <div className="card" style={{ width: '400px', margin: 'auto' }}>
                     <div className="card-body">
                       <h2 className="text-center mb-4 display-6">{loginMode ? 'Login' : 'Sign Up'}</h2>
 
@@ -179,7 +179,6 @@ const AuthenticationPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              </div>
             ) : (
               <p>User is logged in. Redirect or show authenticated content here.</p>
             )}

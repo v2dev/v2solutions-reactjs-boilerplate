@@ -29,30 +29,34 @@ const MFAPage: React.FC = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <div className="wrapper">
-
         <div id="content">
-          <div className="container mt-5">
+          <div className=" mt-5">
             <div className="row justify-content-center">
               <div className="col-md-4">
                 <div className="card">
-                  <div className="card-body text-center">
+                  <div className="card-body txt">
                     <h2 className="text-center mb-4">MFA Verification</h2>
-                    {qrCodeData && (
-                      <img src={qrCodeData} alt="QR Code" />
-                    )}
+                    <div className="d-flex justify-content-center mb-3">
+                      {qrCodeData && (
+                        <img src={qrCodeData} alt="QR Code" />
+                      )}
+                    </div>
 
                     <form onSubmit={handleMFAVerification}>
-                      <label htmlFor="mfaCode">Enter MFA Code:</label>
-                      <TextField
-                        type="text"
-                        id="mfaCode"
-                        value={mfaCode}
-                        onChange={(e) => setMfaCode(e.target.value)}
-                      />
+                      <div className="mb-3">
+                        <label htmlFor="mfaCode" className="form-label">Enter MFA Code:</label>
+                        <TextField
+                          type="text"
+                          id="mfaCode"
+                          value={mfaCode}
+                          onChange={(e) => setMfaCode(e.target.value)}
+                          className="form-control"
+                        />
+                      </div>
                       {error && <p className="text-danger">{error}</p>}
-                      <Button type="submit" className="btn btn-primary">
+                      <Button type="submit" variant="contained" color="primary" size="medium">
                         Verify MFA
                       </Button>
                     </form>
@@ -62,10 +66,9 @@ const MFAPage: React.FC = () => {
             </div>
           </div>
         </div>
-
       </div>
       <Footer />
-    </React.Fragment>
+    </>
   );
 }
 

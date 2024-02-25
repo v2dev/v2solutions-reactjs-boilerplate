@@ -84,6 +84,7 @@ const EmployeeAddEditModal: React.FC<IFormFieldsProps> = (props: IFormFieldsProp
                     <form onSubmit={handleSubmit(onSubmit)} noValidate>
                         <Stack spacing={1} width={300}>
                             <TextField
+                             label="Name"
                                 id="filled-read-only-input"
                                 {...register('name',
                                     {
@@ -94,6 +95,7 @@ const EmployeeAddEditModal: React.FC<IFormFieldsProps> = (props: IFormFieldsProp
                             />
                             {errors.name && (<div style={{ color: 'red' }}>{errors.name.message}</div>)}
                             <TextField
+                             label="Email"
                                 {...register('email',
                                     {
                                         required: `Email is required`,
@@ -123,6 +125,7 @@ const EmployeeAddEditModal: React.FC<IFormFieldsProps> = (props: IFormFieldsProp
                                 render={({ message }) => <p>{message}</p>}
                             /> */}
                             <TextField
+                              label="Date of Birth"
                                 {...register('dob',
                                     {
                                         required: `Date Of Birth is required`,
@@ -133,6 +136,7 @@ const EmployeeAddEditModal: React.FC<IFormFieldsProps> = (props: IFormFieldsProp
                             {errors.dob && (<div style={{ color: 'red' }}>{errors.dob.message}</div>)}
 
                             <TextField
+                              label="Designation"
                                 {...register('designation',
                                     {
                                         required: `Designation is required`,
@@ -143,6 +147,7 @@ const EmployeeAddEditModal: React.FC<IFormFieldsProps> = (props: IFormFieldsProp
                             {errors.designation && (<div style={{ color: 'red' }}>{errors.designation.message}</div>)}
 
                             <TextField
+                              label="Education"
                                 {...register('education',
                                     {
                                         required: `Education is required`,
