@@ -192,8 +192,11 @@ const NewEmployeeListPage: React.FC = () => {
   return (
     <React.Fragment>
       <div className="wrapper">
-        <div  style={{ position: "relative", zIndex: 2 }}>  <Header /></div>
-    
+        <div style={{ position: "relative", zIndex: 2 }}>
+          {" "}
+          <Header />
+        </div>
+
         <div id="content" className="content">
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
@@ -201,19 +204,19 @@ const NewEmployeeListPage: React.FC = () => {
             </div>
           </nav>
           <Box
-    sx={{
-      width: "100%",
-      height: "100%",
-      borderBottomStyle: "solid",
-      borderColor: "black",
-      overflow: "auto",
-      padding: "10px",
-      minHeight: "calc(100vh - 50px)", // Adjust 50px to match your actual footer height
-      paddingBottom: "100px", // Adjust as needed to ensure space for the fixed footer
-      position: "relative",
-      zIndex: 1, // Add this line to set the z-index for the content area
-    }}
-  >
+            sx={{
+              width: "100%",
+              height: "100%",
+              borderBottomStyle: "solid",
+              borderColor: "black",
+              overflow: "auto",
+              padding: "10px",
+              minHeight: "calc(100vh - 50px)",
+              paddingBottom: "100px",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
             <div
               style={{
                 display: "flex",
@@ -263,11 +266,9 @@ const NewEmployeeListPage: React.FC = () => {
               columns={columns}
               components={{
                 Toolbar: CustomToolbar,
-                //LoadingOverlay: LinearProgress, // another way of showing loader while data being fetched from the server
               }}
               sx={{
-                // Add any additional styles for the DataGrid
-                margin: "10px", // Example: Add margin for better spacing
+                margin: "10px",
               }}
             />
             <Button
@@ -298,8 +299,8 @@ const NewEmployeeListPage: React.FC = () => {
         </div>
       </div>
       <div style={{ position: "fixed", bottom: 0, width: "100%", zIndex: 0 }}>
-  <Footer />
-</div>
+        <Footer />
+      </div>
     </React.Fragment>
   )
 }
