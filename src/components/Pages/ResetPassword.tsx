@@ -68,7 +68,7 @@ const ResetPassword: React.FC = () => {
       setOtp(value)
     }
   }
-
+// 
   return (
     <div
       className="wrapper"
