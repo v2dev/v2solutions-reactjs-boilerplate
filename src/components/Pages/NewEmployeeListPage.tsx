@@ -10,6 +10,7 @@ import {
   GridToolbarDensitySelector,
   GridToolbarExport,
 } from "@mui/x-data-grid"
+import { format } from "date-fns"
 import useCrudApi from "../../hooks/useCrudApi"
 import API_ENDPOINTS from "../../configs/apiConfig"
 import EmployeeAddEditModal from "./EmployeeAddEditModal"
@@ -140,6 +141,8 @@ const NewEmployeeListPage: React.FC = () => {
           </span>
         </strong>
       ),
+      // Add the valueFormatter to format the date
+      valueFormatter: (params) => format(new Date(params.value), "dd-MM-yyyy"),
     },
     {
       field: "designation",
@@ -206,9 +209,7 @@ const NewEmployeeListPage: React.FC = () => {
           <Box
             sx={{
               width: "100%",
-              height: "100%",
-              borderBottomStyle: "solid",
-              borderColor: "black",
+             
               overflow: "auto",
               padding: "10px",
               minHeight: "calc(100vh - 50px)",
@@ -298,7 +299,7 @@ const NewEmployeeListPage: React.FC = () => {
           />
         </div>
       </div>
-      <div style={{ position: "fixed", bottom: 0, width: "100%", zIndex: 0 }}>
+      <div >
         <Footer />
       </div>
     </React.Fragment>

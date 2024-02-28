@@ -30,12 +30,12 @@ const MFAPage: React.FC = () => {
 
   return (
     <>
-      <div className="wrapper">
+      <div className="wrapper" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <div id="content">
           <div className=" mt-5">
             <div className="row justify-content-center">
               <div className="col-md-4">
-                <div className="card">
+              <div className="card" style={{ width: '400px', margin: 'auto' }}>
                   <div className="card-body txt">
                     <h2 className="text-center mb-4">MFA Verification</h2>
                     <div className="d-flex justify-content-center mb-3">
